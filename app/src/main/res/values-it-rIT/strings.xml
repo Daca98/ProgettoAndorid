@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VCV</string>
+    <string name="title_calendar">Calendario</string>
+    <string name="title_myProfile">Profilo</string>
+    <string name="title_path">Percorsi</string>
+    <string name="title_hourMonth">Ore Mese</string>
+</resources>

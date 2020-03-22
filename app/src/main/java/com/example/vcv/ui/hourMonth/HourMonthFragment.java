@@ -1,4 +1,4 @@
-package com.example.vcv.ui.notifications;
+package com.example.vcv.ui.hourMonth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,18 +13,19 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.vcv.R;
+import com.example.vcv.ui.calendar.CalendarViewModel;
 
-public class NotificationsFragment extends Fragment {
+public class HourMonthFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private HourMonthViewModel hourMonthViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        hourMonthViewModel =
+                ViewModelProviders.of(this).get(HourMonthViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_hourmonth, container, false);
+        final TextView textView = root.findViewById(R.id.text_month);
+        hourMonthViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
