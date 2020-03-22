@@ -3,4 +3,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="login">LOGIN</string>
+    <string name="signin">SIGNIN</string>
+    <string name="email_capitalize">Email</string>
+    <string name="pssw_capitalize">Password</string>
+    <string name="access_uppercase">ACCEDI</string>
+    <string name="forget_pssw_capitalize"><u>Recupera password</u></string>
 </resources>
