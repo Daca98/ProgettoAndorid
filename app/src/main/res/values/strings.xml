@@ -10,4 +10,8 @@
     <string name="pssw_capitalize">Password</string>
     <string name="access_uppercase">ACCEDI</string>
     <string name="forget_pssw_capitalize"><u>Recupera password</u></string>
+    <string name="name_capitalize">Nome</string>
+    <string name="surname_capitalize">Cognome</string>
+    <string name="phone_number_capitalize">Telegono</string>
+
 </resources>

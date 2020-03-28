@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
-    <color name="bck_tab_selected">#03DAC5</color>
+    <color name="bck_tab_unselected">#03DAC5</color>
     <color name="bck_button">#6200EA</color>
 
     <color name="blue">#6200EA</color>
