@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/login"
-                android:background="@color/white"
+                android:background="@drawable/tab_left_border_selected"
                 android:onClick="clickLogin" />
 
             <Button
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/signin"
-                android:background="@color/bck_tab_unselected"
+                android:background="@drawable/tab_right_border"
                 android:onClick="clickSignin" />
         </LinearLayout>
 

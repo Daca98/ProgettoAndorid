@@ -9,4 +9,6 @@
 
     <color name="blue">#6200EA</color>
     <color name="white">#FFF</color>
+
+    <color name="blue_border">#9549FF</color>
 </resources>

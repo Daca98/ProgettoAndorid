@@ -1,8 +1,8 @@
 package com.example.vcv;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,8 +37,8 @@ public class activity_login extends AppCompatActivity {
         Button BLogin = findViewById(R.id.b_login);
         Button BSignin = findViewById(R.id.b_signin);
 
-        BLogin.setBackgroundColor(getResources().getColor(R.color.white));
-        BSignin.setBackgroundColor(getResources().getColor(R.color.bck_tab_unselected));
+        BLogin.setBackgroundResource(R.drawable.tab_left_border_selected);
+        BSignin.setBackgroundResource(R.drawable.tab_right_border);
         insertFragmentLogin();
     }
 
@@ -46,8 +46,8 @@ public class activity_login extends AppCompatActivity {
         Button BLogin = findViewById(R.id.b_login);
         Button BSignin = findViewById(R.id.b_signin);
 
-        BLogin.setBackgroundColor(getResources().getColor(R.color.bck_tab_unselected));
-        BSignin.setBackgroundColor(getResources().getColor(R.color.white));
+        BLogin.setBackgroundResource(R.drawable.tab_left_border);
+        BSignin.setBackgroundResource(R.drawable.tab_right_border_selected);
         insertFragmentSignin();
     }
 
