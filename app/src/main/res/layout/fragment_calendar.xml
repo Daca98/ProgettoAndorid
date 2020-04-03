@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.calendar.CalendarFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TV_Month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundBlue"
+            android:gravity="center|top"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp"
+            android:paddingTop="10dp"/>
+
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/compactcalendar_view"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            app:compactCalendarBackgroundColor="@color/backgroundBlue"
+            app:compactCalendarCurrentDayBackgroundColor="@color/labelBlue"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimaryDark"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextColor="@color/colorWhite"
+            app:compactCalendarTextSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+</LinearLayout>

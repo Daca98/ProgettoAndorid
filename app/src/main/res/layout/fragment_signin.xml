@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,8 +11,8 @@
         android:paddingStart="6dp"
         android:paddingRight="6dp"
         android:paddingEnd="6dp">
-
         <EditText
+            android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -22,8 +21,8 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/user"
             android:drawableLeft="@drawable/user" />
-
         <EditText
+            android:id="@+id/et_surname"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -32,8 +31,8 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/user"
             android:drawableLeft="@drawable/user" />
-
         <EditText
+            android:id="@+id/et_telephone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -42,8 +41,8 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/phone"
             android:drawableLeft="@drawable/phone" />
-
         <EditText
+            android:id="@+id/et_email_signin"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -52,6 +51,5 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/email"
             android:drawableLeft="@drawable/email" />
-
     </LinearLayout>
 </ScrollView>

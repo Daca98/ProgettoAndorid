@@ -9,12 +9,10 @@
     android:background="@drawable/background_login"
     android:orientation="vertical"
     android:weightSum="12">
-
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -28,13 +26,11 @@
         android:layout_marginStart="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginEnd="30dp">
-
         <LinearLayout
             android:id="@+id/container_switch_operation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <Button
                 android:id="@+id/b_login"
                 android:layout_width="0dp"
@@ -42,8 +38,7 @@
                 android:layout_weight="1"
                 android:text="@string/login"
                 android:background="@drawable/tab_left_border_selected"
-                android:onClick="clickLogin" />
-
+                android:onClick="clickLoginTab" />
             <Button
                 android:id="@+id/b_signin"
                 android:layout_width="0dp"
@@ -51,40 +46,36 @@
                 android:layout_weight="1"
                 android:text="@string/signin"
                 android:background="@drawable/tab_right_border"
-                android:onClick="clickSignin" />
+                android:onClick="clickSigninTab" />
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/container_fragment"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingBottom="70dp" >
-
-            <fragment
+            <FrameLayout
                 android:id="@+id/body_login_signin_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.example.vcv.ui.home.HomeFragment" />
-
+                android:name="com.example.vcv.formlogin.Login" />
         </LinearLayout>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="-20dp" >
-
         <Button
+            android:id="@+id/b_access"
             android:layout_width="120dp"
             android:layout_height="40dp"
-            android:text="@string/access_uppercase"
+            android:text="@string/login"
             android:textSize="12sp"
             android:background="@drawable/button_confirm"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:onClick="access"/>
     </LinearLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

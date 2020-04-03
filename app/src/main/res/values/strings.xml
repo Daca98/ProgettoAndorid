@@ -1,17 +1,16 @@
 <resources>
     <string name="app_name">VCV</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_path">Path</string>
+    <string name="title_myProfile">My Profile</string>
+    <string name="title_hourMonth">Hour Month</string>
 
     <string name="login">LOGIN</string>
     <string name="signin">SIGNIN</string>
     <string name="email_capitalize">Email</string>
     <string name="pssw_capitalize">Password</string>
-    <string name="access_uppercase">ACCEDI</string>
-    <string name="forget_pssw_capitalize"><u>Recupera password</u></string>
-    <string name="name_capitalize">Nome</string>
-    <string name="surname_capitalize">Cognome</string>
-    <string name="phone_number_capitalize">Telegono</string>
-
+    <string name="forget_pssw_capitalize"><u>Forgot password</u></string>
+    <string name="name_capitalize">Name</string>
+    <string name="surname_capitalize">Surname</string>
+    <string name="phone_number_capitalize">Phone</string>
 </resources>

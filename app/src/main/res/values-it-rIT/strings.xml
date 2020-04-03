@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VCV</string>
+    <string name="title_calendar">Calendario</string>
+    <string name="title_myProfile">Profilo</string>
+    <string name="title_path">Percorsi</string>
+    <string name="title_hourMonth">Ore Mese</string>
+    <string name="login">ACCEDI</string>
+    <string name="signin">REGISTRATI</string>
+    <string name="email_capitalize">Email</string>
+    <string name="pssw_capitalize">Password</string>
+    <string name="forget_pssw_capitalize"><u>Recupera password</u></string>
+    <string name="name_capitalize">Nome</string>
+    <string name="surname_capitalize">Cognome</string>
+    <string name="phone_number_capitalize">Telefono</string>
+</resources>

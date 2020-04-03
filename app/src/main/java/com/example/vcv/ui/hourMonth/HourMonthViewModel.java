@@ -1,16 +1,16 @@
-package com.example.vcv.ui.dashboard;
+package com.example.vcv.ui.hourMonth;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DashboardViewModel extends ViewModel {
+public class HourMonthViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DashboardViewModel() {
+    public HourMonthViewModel() {
         mText = new MutableLiveData<>();
-        // mText.setValue("This is dashboard fragment");
+        mText.setValue("This is month fragment");
     }
 
     public LiveData<String> getText() {
