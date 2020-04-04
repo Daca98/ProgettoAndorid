@@ -1,22 +1,22 @@
 package com.example.vcv;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.vcv.formlogin.Login;
-import com.example.vcv.formlogin.Signin;
+import com.example.vcv.ui.login.LoginFragment;
+import com.example.vcv.ui.signin.SigninFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class activity_login extends AppCompatActivity {
-    private android.app.FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private boolean isLogginin = true;
 
@@ -62,14 +62,14 @@ public class activity_login extends AppCompatActivity {
     private void insertFragmentLogin() {
         LinearLayout containerFragment = findViewById(R.id.container_fragment);
         containerFragment.setPadding(15, 10, 15, 70);
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.body_login_signin_fragment);
         if (fragment != null) {
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(fragment);
             fragmentTransaction.commit();
         }
-        Fragment newFragment = new Login();
+        Fragment newFragment = new LoginFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.body_login_signin_fragment, newFragment);
         fragmentTransaction.commit();
@@ -78,14 +78,14 @@ public class activity_login extends AppCompatActivity {
     private void insertFragmentSignin() {
         LinearLayout containerFragment = findViewById(R.id.container_fragment);
         containerFragment.setPadding(15, 10, 15, 35);
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.body_login_signin_fragment);
         if (fragment != null) {
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(fragment);
             fragmentTransaction.commit();
         }
-        Fragment newFragment = new Signin();
+        Fragment newFragment = new SigninFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.body_login_signin_fragment, newFragment);
         fragmentTransaction.commit();
