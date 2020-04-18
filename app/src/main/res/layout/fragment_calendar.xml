@@ -10,15 +10,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/TV_Month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2.5"
             android:background="@color/backgroundBlue"
             android:gravity="center|top"
             android:textColor="@color/colorWhite"
@@ -40,136 +38,141 @@
             app:compactCalendarTextSize="12sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:id="@+id/box_calendarHour"
-        android:layout_gravity="center"
-        android:background="@drawable/login_border"
-        android:padding="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp">
-
+        android:layout_height="wrap_content" >
         <LinearLayout
-            android:id="@+id/container_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/textService"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25dp"
-                android:paddingTop="15dp"
-                android:paddingRight="25dp"
-                android:text="@string/service_hours"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            <LinearLayout
-                android:id="@+id/textHour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/textHourStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:paddingLeft="25dp"
-                    android:paddingTop="15dp"
-                    android:text="@string/start"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/HourStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:paddingRight="25dp"
-                    android:paddingTop="15dp"
-                    android:textSize="16sp"/>
-                <TextView
-                    android:id="@+id/textHourEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:paddingLeft="25dp"
-                    android:paddingTop="15dp"
-                    android:text="@string/end"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/HourEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:paddingRight="25dp"
-                    android:paddingTop="15dp"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/boxJob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/textJob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="25dp"
-                    android:paddingTop="15dp"
-                    android:text="@string/job"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/job"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:paddingRight="25dp"
-                    android:paddingTop="15dp"
-                    android:textSize="16sp"/>
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/box_calendarHour"
+            android:layout_gravity="center"
+            android:background="@drawable/login_border"
+            android:padding="1dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
 
-            <RelativeLayout
-                android:id="@+id/boxButtons"
+            <LinearLayout
+                android:id="@+id/container_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="25dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="25dp"
+                    android:text="@string/service_hours"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:id="@+id/textHour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textHourStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/start"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/HourStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingRight="25dp"
+                        android:paddingTop="15dp"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/textHourEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/end"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/HourEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingRight="25dp"
+                        android:paddingTop="15dp"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/boxJob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textJob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/job"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/job"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:paddingRight="25dp"
+                        android:paddingTop="15dp"
+                        android:textSize="16sp"/>
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/button_confirm"
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="25dp"
-                    android:background="@drawable/button_confirm"
-                    android:text="@string/confirm"
-                    android:layout_alignParentLeft="true"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="12sp"/>
+                <RelativeLayout
+                    android:id="@+id/boxButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/button_modify"
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/button_confirm"
-                    android:text="@string/modify"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="12sp" />
-            </RelativeLayout>
+                    <Button
+                        android:id="@+id/button_confirm"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="25dp"
+                        android:background="@drawable/button_confirm"
+                        android:text="@string/confirm"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp"/>
+
+                    <Button
+                        android:id="@+id/button_modify"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/button_confirm"
+                        android:text="@string/modify"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

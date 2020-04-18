@@ -51,7 +51,9 @@ public class CalendarFragment extends Fragment {
 
         //Per il testo del mese e anno sopra al calendario
         final TextView textView = root.findViewById(R.id.TV_Month);
-        textView.setText(dateFormatMonth.format(Calendar.getInstance().getTime()));
+        String month = dateFormatMonth.format(Calendar.getInstance().getTime());
+        String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
+        textView.setText(monthCapitalize);
 
         //evento test
         try {
@@ -80,17 +82,33 @@ public class CalendarFragment extends Fragment {
             //quando scorro tra i mesi
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                textView.setText(dateFormatMonth.format(firstDayOfNewMonth));
+                String month = dateFormatMonth.format(firstDayOfNewMonth);
+                String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
+                textView.setText(monthCapitalize);
             }
         });
 
         //Listener per passare alla modifica delle ore
         modify.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                Fragment calendarFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+//                fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.remove(calendarFragment);
+//                fragmentTransaction.commit();
+//
+//                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment();
+//                fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.add(R.id.nav_host_fragment, modifyCalendarFragment);
+//                fragmentTransaction.commit();
+
+
                 ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment,"modifyCalendarFragment");
+                fragmentTransaction.replace(R.id.nav_host_fragment, modifyCalendarFragment, "modifyCalendarFragment");
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

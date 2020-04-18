@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.calendar.ModifyCalendarFragment"
-    android:id="@+id/modifyCalendarFragment"
-    android:background="@color/design_default_color_error">
+    android:id="@+id/modifyCalendarFragment" >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
