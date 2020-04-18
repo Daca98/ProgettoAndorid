@@ -13,4 +13,17 @@
     <string name="name_capitalize">Nome</string>
     <string name="surname_capitalize">Cognome</string>
     <string name="phone_number_capitalize">Telefono</string>
+    <string name="service_hours">Orari da ordini di servizio</string>
+    <string name="start">Ora inizio:</string>
+    <string name="end">Ora fine:</string>
+    <string name="job">Mansione:</string>
+    <string name="confirm">Conferma</string>
+    <string name="modify">Modifica</string>
+    <string name="effectiveHours">Orari Effettivi</string>
+    <string name="StartHour">Ora Inizio</string>
+    <string name="totalHour">Ore Totali</string>
+    <string name="extraordinary">Straordinari</string>
+    <string name="equipment">Equipaggiamento</string>
+    <string name="note">Note</string>
+    <string name="endHour">Ora Fine</string>
 </resources>

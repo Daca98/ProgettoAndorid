@@ -13,4 +13,17 @@
     <string name="name_capitalize">Name</string>
     <string name="surname_capitalize">Surname</string>
     <string name="phone_number_capitalize">Phone</string>
+    <string name="service_hours">Service Hours</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
+    <string name="job">Job:</string>
+    <string name="confirm">Confirm</string>
+    <string name="modify">Modify</string>
+    <string name="effectiveHours">Effective Hours</string>
+    <string name="StartHour">Start Hour</string>
+    <string name="totalHour">Total Hour</string>
+    <string name="extraordinary">Extraordinary</string>
+    <string name="equipment">Equipment</string>
+    <string name="note">Note</string>
+    <string name="endHour">End Hour</string>
 </resources>
