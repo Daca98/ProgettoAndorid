@@ -26,4 +26,7 @@
     <string name="equipment">Equipaggiamento</string>
     <string name="note">Note</string>
     <string name="endHour">Ora Fine</string>
+    <string name="confirm_pssw_capitalize">Conferma password</string>
+    <string name="save">Salva</string>
+    <string name="change_password">Cambia Password</string>
 </resources>

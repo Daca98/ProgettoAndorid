@@ -26,4 +26,7 @@
     <string name="equipment">Equipment</string>
     <string name="note">Note</string>
     <string name="endHour">End Hour</string>
+    <string name="confirm_pssw_capitalize">Confirm password</string>
+    <string name="save">Save</string>
+    <string name="change_password">Change Password</string>
 </resources>
