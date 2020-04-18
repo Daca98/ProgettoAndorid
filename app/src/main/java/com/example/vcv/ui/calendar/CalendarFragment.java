@@ -1,6 +1,7 @@
 package com.example.vcv.ui.calendar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.drm.DrmStore;
 import android.graphics.Color;
 import android.icu.util.ULocale;
@@ -10,14 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.vcv.MainActivity;
 import com.example.vcv.R;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -41,11 +46,12 @@ public class CalendarFragment extends Fragment {
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        Button modify = (Button) root.findViewById(R.id.button_modify);
+        compactCalendar = (CompactCalendarView) root.findViewById(R.id.compactcalendar_view);
+
         //Per il testo del mese e anno sopra al calendario
         final TextView textView = root.findViewById(R.id.TV_Month);
         textView.setText(dateFormatMonth.format(Calendar.getInstance().getTime()));
-
-        compactCalendar = (CompactCalendarView) root.findViewById(R.id.compactcalendar_view);
 
         //evento test
         try {
@@ -75,6 +81,18 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 textView.setText(dateFormatMonth.format(firstDayOfNewMonth));
+            }
+        });
+
+        //Listener per passare alla modifica delle ore
+        modify.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment,"modifyCalendarFragment");
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
