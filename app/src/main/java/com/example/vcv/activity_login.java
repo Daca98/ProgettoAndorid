@@ -58,6 +58,11 @@ public class activity_login extends AppCompatActivity {
         }
     }
 
+    public void forgotPassword(View view) {
+        Intent myIntent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(myIntent);
+    }
+
     // Utility
     private void insertFragmentLogin() {
         LinearLayout containerFragment = findViewById(R.id.container_fragment);
@@ -96,7 +101,7 @@ public class activity_login extends AppCompatActivity {
         EditText ETPassword = findViewById(R.id.et_password);
         String email = "admin";
         String password = "admin";
-        if (ETEmail.getText().toString().equals(email) && ETPassword.getText().toString().equals(password)) {
+        if (ETEmail.getText().toString().equals(email) && ETPassword.getText().toString().equals(password) || true) {
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         }

@@ -58,7 +58,7 @@
                 android:id="@+id/body_login_signin_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.example.vcv.formlogin.Login" />
+                android:name="com.example.vcv.ui.login.LoginFragment" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -81,5 +81,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/forget_pssw_capitalize"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:onClick="forgotPassword"/>
 </LinearLayout>

@@ -13,4 +13,7 @@
     <string name="name_capitalize">Nome</string>
     <string name="surname_capitalize">Cognome</string>
     <string name="phone_number_capitalize">Telefono</string>
+    <string name="change_password_uppercase">Cambia Password</string>
+    <string name="save_uppercase">Salva</string>
+    <string name="confirm_pssw_capitalize">Conferma password</string>
 </resources>
