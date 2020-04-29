@@ -29,4 +29,6 @@
     <string name="confirm_pssw_capitalize">Confirm password</string>
     <string name="save">Save</string>
     <string name="change_password">Change Password</string>
+    <string name="viewPaths">View Paths</string>
+    <string name="selectPath">Select path:</string>
 </resources>
