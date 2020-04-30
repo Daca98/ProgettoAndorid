@@ -29,4 +29,7 @@
     <string name="confirm_pssw_capitalize">Confirm password</string>
     <string name="save">Save</string>
     <string name="change_password">Change Password</string>
+    <string name="can_not_load_image">Can not load image</string>
+    <string name="success_remove_image">Image removed with success</string>
+    <string name="error_remove_image">Some problems occurs while removing profile image</string>
 </resources>
