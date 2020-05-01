@@ -31,4 +31,5 @@
     <string name="change_password">Change Password</string>
     <string name="viewPaths">View Paths</string>
     <string name="selectPath">Select path:</string>
+    <string name="google_maps_key">AIzaSyB_ofOjYE3Si16x9rDvlbnVD4gnrGSjfbw</string>
 </resources>
