@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -100,12 +101,58 @@ public class MyProfileFragment extends Fragment {
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
 
-                saveToInternalStorage(BitmapFactory.decodeFile(picturePath));
+                new SaveImage(BitmapFactory.decodeFile(picturePath)).execute();
 
             } catch (Exception e) {
                 Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+        }
+    }
+
+    private class SaveImage extends AsyncTask<Void, Void, Void> {
+        private Bitmap bitmapImage;
+
+        public SaveImage(Bitmap bitmapImage) {
+            super();
+            this.bitmapImage = bitmapImage;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            FileOutputStream fos = null;
+
+            try {
+                ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
+                // path to /data/data/yourapp/app_data/ + DIR_IMAGE_NAME
+                File directory = cw.getDir(DIR_IMAGE_NAME, Context.MODE_PRIVATE);
+                // Create a directory with the name specified in DIR_IMAGE_NAME
+                File mypath = new File(directory, "profile.jpg");
+
+                fos = new FileOutputStream(mypath);
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            loadImageFromStorage();
         }
     }
 
@@ -119,38 +166,15 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void setDefaultIcon() {
-        ImageView profilePicture = getActivity().findViewById(R.id.profile_picture);
-        profilePicture.setImageBitmap(null); // remove uploaded picture
-        profilePicture.setBackgroundResource(R.drawable.user);
-        Button buttonClear = getActivity().findViewById(R.id.b_remove_profile_picture);
-        buttonClear.setVisibility(View.INVISIBLE);
-    }
-
-    private boolean saveToInternalStorage(Bitmap bitmapImage) {
-        boolean saveOk = false;
-        FileOutputStream fos = null;
-
         try {
-            ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-            // path to /data/data/yourapp/app_data/ + DIR_IMAGE_NAME
-            File directory = cw.getDir(DIR_IMAGE_NAME, Context.MODE_PRIVATE);
-            // Create a directory with the name specified in DIR_IMAGE_NAME
-            File mypath = new File(directory, "profile.jpg");
-
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            saveOk = true;
+            ImageView profilePicture = getActivity().findViewById(R.id.profile_picture);
+            profilePicture.setImageBitmap(null); // remove uploaded picture
+            profilePicture.setBackgroundResource(R.drawable.user);
+            Button buttonClear = getActivity().findViewById(R.id.b_remove_profile_picture);
+            buttonClear.setVisibility(View.INVISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-
-        return saveOk;
     }
 
     private void loadImageFromStorage() {
