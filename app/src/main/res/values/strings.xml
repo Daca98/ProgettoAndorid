@@ -35,4 +35,8 @@
     <string name="can_not_load_image">Can not load image</string>
     <string name="success_remove_image">Image removed with success</string>
     <string name="error_remove_image">Some problems occurs while removing profile image</string>
+    <string name="take_picture">Take picture</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="choose_profile_pic_title">Choose your profile picture</string>
 </resources>

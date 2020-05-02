@@ -34,4 +34,8 @@
     <string name="can_not_load_image">Impossibile caricare immagine</string>
     <string name="success_remove_image">Immagine rimossa con successo</string>
     <string name="error_remove_image">Ci sono stati dei problemi durante la rimozione dell\'immagine</string>
+    <string name="take_picture">Scatta una foto</string>
+    <string name="cancel">Annulla</string>
+    <string name="choose_from_gallery">Scegli dalla galleria</string>
+    <string name="choose_profile_pic_title">Scegli la tua foto profilo</string>
 </resources>

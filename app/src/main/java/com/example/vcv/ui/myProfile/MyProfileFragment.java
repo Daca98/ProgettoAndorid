@@ -1,8 +1,10 @@
 package com.example.vcv.ui.myProfile;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,11 +38,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class MyProfileFragment extends Fragment {
 
-    private static int RESULT_LOAD_IMAGE = 1;
+    private static int RESULT_LOAD_IMAGE_FROM_GALLERY = 1;
+    private static int RESULT_LOAD_IMAGE_FROM_CAMERA = 0;
     private static final String DIR_IMAGE_NAME = "imageDir";
     private static final int MY_PERMISSIONS_CODE = 1;
     private Runnable waitingTaskForLoadImage = new Runnable() {
@@ -65,12 +70,13 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Check if there are permissions.
-                // TRUE -> There are no permission about READ_EXTERNAL_STORAGE
+                // TRUE -> There are no permission about READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE
                 // FALSE -> Permissions have already been setted
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_CODE); // MY_PERMISSIONS_CODE is a value that we can define ourself in this class
+                if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+                        (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_CODE); // MY_PERMISSIONS_CODE is a value that we can define ourself in this class
                 } else {
-                    openGalleryAndChooseImage();
+                    chooseImage();
                 }
             }
         });
@@ -90,30 +96,70 @@ public class MyProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Handler handler = new Handler();
-        handler.postDelayed(waitingTaskForLoadImage, 100);
+        handler.postDelayed(waitingTaskForLoadImage, 10);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            try {
-                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();
+        try {
+            if (resultCode != RESULT_CANCELED) {
+                // requestCode == 0 -> take a photo
+                // requestCode == 1 -> choose photo from gallery
+                switch (requestCode) {
+                    case 0:
+                        if (requestCode == RESULT_LOAD_IMAGE_FROM_CAMERA && resultCode == RESULT_OK && data != null) {
+                            Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                            new SaveImage(selectedImage).execute();
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
+                            stopProgressBar();
+                        }
+                        break;
+                    case 1:
+                        if (requestCode == RESULT_LOAD_IMAGE_FROM_GALLERY && resultCode == RESULT_OK && data != null) {
+                            Uri selectedImage = data.getData();
+                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                cursor.close();
+                            if (selectedImage != null) {
+                                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                                cursor.moveToFirst();
 
-                new SaveImage(BitmapFactory.decodeFile(picturePath)).execute();
+                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                String picturePath = cursor.getString(columnIndex);
+                                cursor.close();
 
-            } catch (Exception e) {
+                                new SaveImage(BitmapFactory.decodeFile(picturePath)).execute();
+                            } else {
+                                Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
+                                stopProgressBar();
+                            }
+                        }
+                        break;
+                }
+            } else {
                 Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                stopProgressBar();
             }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            stopProgressBar();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        try {
+            if (requestCode == MY_PERMISSIONS_CODE) {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    chooseImage();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -160,16 +206,38 @@ public class MyProfileFragment extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             loadImageFromStorage();
+            stopProgressBar();
         }
+
     }
 
     // Utility
-    private void openGalleryAndChooseImage() {
-        Intent i = new Intent(
-                Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    private void chooseImage() {
+        final CharSequence[] options = {getString(R.string.take_picture), getString(R.string.choose_from_gallery), getString(R.string.cancel)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.choose_profile_pic_title));
 
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals(getString(R.string.take_picture))) {
+                    startProgressBar();
+
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, RESULT_LOAD_IMAGE_FROM_CAMERA);
+                } else if (options[item].equals(getString(R.string.choose_from_gallery))) {
+                    startProgressBar();
+
+                    Intent pickPhoto = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, RESULT_LOAD_IMAGE_FROM_GALLERY);
+                } else if (options[item].equals(getString(R.string.cancel))) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     private void setDefaultIcon() {
@@ -225,6 +293,24 @@ public class MyProfileFragment extends Fragment {
             } else {
                 Toast.makeText(getContext(), getString(R.string.error_remove_image), Toast.LENGTH_SHORT).show();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopProgressBar() {
+        try {
+            ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar_image);
+            progressBar.setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startProgressBar() {
+        try {
+            ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar_image);
+            progressBar.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
         }
