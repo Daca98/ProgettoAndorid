@@ -1,22 +1,16 @@
 package com.example.vcv;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 

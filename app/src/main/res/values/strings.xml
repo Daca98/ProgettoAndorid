@@ -32,4 +32,7 @@
     <string name="viewPaths">View Paths</string>
     <string name="selectPath">Select path:</string>
     <string name="google_maps_key">AIzaSyB_ofOjYE3Si16x9rDvlbnVD4gnrGSjfbw</string>
+    <string name="can_not_load_image">Can not load image</string>
+    <string name="success_remove_image">Image removed with success</string>
+    <string name="error_remove_image">Some problems occurs while removing profile image</string>
 </resources>

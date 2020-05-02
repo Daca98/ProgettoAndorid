@@ -31,4 +31,7 @@
     <string name="change_password">Cambia Password</string>
     <string name="viewPaths">Visualizza Percorsi</string>
     <string name="selectPath">Seleziona il percorso:</string>
+    <string name="can_not_load_image">Impossibile caricare immagine</string>
+    <string name="success_remove_image">Immagine rimossa con successo</string>
+    <string name="error_remove_image">Ci sono stati dei problemi durante la rimozione dell\'immagine</string>
 </resources>

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:padding="15dp"
     tools:context=".ui.myProfile.MyProfileFragment">
 
     <LinearLayout
@@ -14,79 +13,120 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_name_user_data"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/user"
-            android:drawableLeft="@drawable/user"
-            android:drawablePadding="10dp"
-            android:hint="@string/name_capitalize"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/et_surname_user_data"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/user"
-            android:drawableLeft="@drawable/user"
-            android:drawablePadding="10dp"
-            android:hint="@string/surname_capitalize"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/et_telephone_user_data"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/phone"
-            android:drawableLeft="@drawable/phone"
-            android:drawablePadding="10dp"
-            android:hint="@string/phone_number_capitalize"
-            android:inputType="phone" />
-
-        <EditText
-            android:id="@+id/et_email_signin_user_data"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/email"
-            android:drawableLeft="@drawable/email"
-            android:drawablePadding="10dp"
-            android:hint="@string/email_capitalize"
-            android:inputType="textEmailAddress" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4">
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundBlue">
+                <ImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_centerInParent="true"/>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_centerInParent="true">
+                    <Button
+                        android:id="@+id/b_remove_profile_picture"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/clear_button"/>
 
-            <Button
-                android:id="@+id/b_change_password"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/button_confirm"
-                android:text="@string/change_password"
-                android:textColor="@color/white"
-                android:textSize="12sp"/>
-
-            <Button
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="100dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/button_confirm"
-                android:text="@string/save"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                    <Button
+                        android:id="@+id/b_edit_profile_picture"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/edit_button"/>
+                </RelativeLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <EditText
+                android:id="@+id/et_name_user_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/user"
+                android:drawableLeft="@drawable/user"
+                android:drawablePadding="10dp"
+                android:hint="@string/name_capitalize"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_surname_user_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/user"
+                android:drawableLeft="@drawable/user"
+                android:drawablePadding="10dp"
+                android:hint="@string/surname_capitalize"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_telephone_user_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/phone"
+                android:drawableLeft="@drawable/phone"
+                android:drawablePadding="10dp"
+                android:hint="@string/phone_number_capitalize"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/et_email_signin_user_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/email"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="10dp"
+                android:hint="@string/email_capitalize"
+                android:inputType="textEmailAddress" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/b_change_password"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_confirm"
+                    android:text="@string/change_password"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/button_confirm"
+                    android:text="@string/save"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

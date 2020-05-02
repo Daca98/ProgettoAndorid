@@ -3,7 +3,7 @@
     <item android:left="1dp">
         <shape android:shape="rectangle">
             <corners android:topRightRadius="20dp" />
-            <solid android:color="@color/white" />
+            <solid android:color="@color/bck_tab_selected" />
         </shape>
     </item>
 </selector>
