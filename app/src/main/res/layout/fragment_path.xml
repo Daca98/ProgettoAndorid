@@ -5,81 +5,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.path.PathFragment">
-
+    tools:context=".ui.path.PathFragment" >
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_weight="5" />
+        android:layout_height="0dp"
+        android:layout_weight="7" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:background="@drawable/login_border"
-        android:padding="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp">
-
-        <TextView
-            android:paddingLeft="25dp"
-            android:paddingTop="15dp"
-            android:paddingRight="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/viewPaths"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
-
-        <LinearLayout
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/selectPath"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp">
+            android:orientation="horizontal"
+            android:padding="1dp"
+            android:background="@drawable/login_border"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="5dp">
 
-            <Button
-                android:id="@+id/button_modify"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:background="@drawable/button_confirm"
-                android:text="@string/confirm"
-                android:textColor="@color/colorWhite"
-                android:textSize="12sp" />
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:padding="1dp">
+
+                <TextView
+                    android:paddingLeft="25dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/viewPaths"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <LinearLayout
+                    android:paddingLeft="25dp"
+                    android:paddingTop="25dp"
+                    android:paddingRight="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/selectPath"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="25dp"
+                    android:paddingTop="25dp"
+                    android:paddingRight="25dp">
+
+                    <Button
+                        android:id="@+id/button_modify"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/button_confirm"
+                        android:text="@string/confirm"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
