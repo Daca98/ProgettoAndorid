@@ -12,9 +12,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
 
     private CompactCalendarView compactCalendar;
@@ -34,5 +31,4 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
-
 }

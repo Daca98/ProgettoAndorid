@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+
+            <size
+                android:width="30dp"
+                android:height="30dp" />
+
+            <solid android:color="@color/design_default_color_secondary" />
+        </shape>
+    </item>
+
+    <item android:drawable="@drawable/clear" />
+</layer-list>
+
