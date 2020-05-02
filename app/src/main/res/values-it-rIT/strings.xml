@@ -29,4 +29,6 @@
     <string name="confirm_pssw_capitalize">Conferma password</string>
     <string name="save">Salva</string>
     <string name="change_password">Cambia Password</string>
+    <string name="viewPaths">Visualizza Percorsi</string>
+    <string name="selectPath">Seleziona il percorso:</string>
 </resources>
