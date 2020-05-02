@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,11 @@ public class MyProfileFragment extends Fragment {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final String DIR_IMAGE_NAME = "imageDir";
     private static final int MY_PERMISSIONS_CODE = 1;
+    private Runnable waitingTaskForLoadImage = new Runnable() {
+        public void run() {
+            loadImageFromStorage();
+        }
+    };
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_myprofile, container, false);
@@ -83,7 +89,8 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadImageFromStorage();
+        Handler handler = new Handler();
+        handler.postDelayed(waitingTaskForLoadImage, 100);
     }
 
     @Override
