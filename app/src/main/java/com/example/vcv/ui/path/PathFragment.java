@@ -85,37 +85,4 @@ public class PathFragment extends Fragment{
 
         return root;
     }
-
-
-    /*@Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setZoomControlsEnabled(true);
-
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                //Resetto i puntatori quando ce ne sono già 2
-                if(listPoints.size() == 2){
-                    listPoints.clear();
-                     map.clear();
-                }
-                //salvo posizione
-                listPoints.add(latLng);
-                //creo puntatore
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                if(listPoints.size() == 1){
-                    //aggiungo primo puntatore sulla mappa
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                }
-                else {
-                    //Aggiungo secondo puntatore
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
-                map.addMarker(markerOptions);
-            }
-        });
-    }*/
-
 }
