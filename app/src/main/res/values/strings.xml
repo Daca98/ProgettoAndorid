@@ -22,7 +22,7 @@
     <string name="effectiveHours">Effective Hours</string>
     <string name="StartHour">Start Hour</string>
     <string name="totalHour">Total Hour</string>
-    <string name="extraordinary">Extraordinary</string>
+    <string name="extraordinary">Extraordinary:</string>
     <string name="equipment">Equipment</string>
     <string name="note">Note</string>
     <string name="endHour">End Hour</string>
@@ -39,4 +39,6 @@
     <string name="cancel">Cancel</string>
     <string name="choose_from_gallery">Choose from gallery</string>
     <string name="choose_profile_pic_title">Choose your profile picture</string>
+    <string name="hourWork">Hour you should work:</string>
+    <string name="hourReallyWork">Hour you worked:</string>
 </resources>

@@ -73,7 +73,8 @@
                     android:paddingRight="25dp"
                     android:text="@string/service_hours"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"/>
                 <LinearLayout
                     android:id="@+id/textHour"
                     android:layout_width="wrap_content"

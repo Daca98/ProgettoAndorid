@@ -24,13 +24,7 @@ public class HourMonthFragment extends Fragment {
         hourMonthViewModel =
                 ViewModelProviders.of(this).get(HourMonthViewModel.class);
         View root = inflater.inflate(R.layout.fragment_hourmonth, container, false);
-        final TextView textView = root.findViewById(R.id.text_month);
-        hourMonthViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
 }
