@@ -14,6 +14,8 @@ import com.example.vcv.ui.login.LoginFragment;
 import com.example.vcv.ui.signin.SigninFragment;
 import com.example.vcv.utility.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase DB
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        System.out.println(mAuth.getUid());
 
         // Check if user is signed in (non-null) and update UI accordingly.
         // FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -154,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         final String email = ((EditText) findViewById(R.id.et_email_signin)).getText().toString();
         String pssw = ((EditText) findViewById(R.id.et_password_signin)).getText().toString();
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
-        User user = new User(name, surname, telephone);
+        final User user = new User(name, surname, telephone);
 
         if (pssw.equals(psswConfirm)) {
             mAuth.createUserWithEmailAndPassword(email, pssw)
@@ -164,9 +168,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("", "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    user.sendEmailVerification()
+                                final FirebaseUser userFirebase = mAuth.getCurrentUser();
+                                if (userFirebase != null) {
+                                    userFirebase.sendEmailVerification()
                                             .addOnCompleteListener(new OnCompleteListener() {
                                                 @Override
                                                 public void onComplete(@NonNull Task task) {
@@ -175,7 +179,26 @@ public class LoginActivity extends AppCompatActivity {
                                                                 "Verification email sent to " + email,
                                                                 Toast.LENGTH_SHORT).show();
 
-                                                        // TODO: Registrazione utente
+                                                        // Initialize Firebase DB
+                                                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                                                        mDatabase.child("users").child(userFirebase.getUid()).setValue(user)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        Toast.makeText(LoginActivity.this,
+                                                                                "Oggetto inserito con successo",
+                                                                                Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Log.e("", e.getMessage());
+                                                                        Toast.makeText(LoginActivity.this,
+                                                                                "Errore inserimento",
+                                                                                Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
                                                     } else {
                                                         Log.e("", "sendEmailVerification", task.getException());
                                                         Toast.makeText(LoginActivity.this,
@@ -192,7 +215,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
-            mDatabase.child("users").child(email).setValue(user);
         }
     }
 }
