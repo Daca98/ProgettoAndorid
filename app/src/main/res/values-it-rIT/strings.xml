@@ -38,7 +38,6 @@
     <string name="cancel">Annulla</string>
     <string name="choose_from_gallery">Scegli dalla galleria</string>
     <string name="choose_profile_pic_title">Scegli la tua foto profilo</string>
-    <string name="google_maps_key">AIzaSyB_ofOjYE3Si16x9rDvlbnVD4gnrGSjfbw</string>
     <string name="hourWork">Ore che dovevi lavorare:</string>
     <string name="hourReallyWork">Ore che hai effettivamente lavorato:</string>
 </resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "83797030773",
+    "firebase_url": "https://progetto-vcv.firebaseio.com",
+    "project_id": "progetto-vcv",
+    "storage_bucket": "progetto-vcv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83797030773:android:66fd01eb4ab694cb0d853c",
+        "android_client_info": {
+          "package_name": "com.example.vcv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83797030773-p6i89p1on39k4jdq9tphipg8g5tp5lum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK0592n4OE9aUxAro3hBGt0gWHpqfKn5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83797030773-p6i89p1on39k4jdq9tphipg8g5tp5lum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
