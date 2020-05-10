@@ -26,10 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.vcv.ForgotPasswordActivity;
+import com.example.vcv.activity.ForgotPasswordActivity;
 import com.example.vcv.R;
 
 import java.io.File;

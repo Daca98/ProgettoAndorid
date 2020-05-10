@@ -1,6 +1,5 @@
-package com.example.vcv;
+package com.example.vcv.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,13 +9,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.vcv.R;
 import com.example.vcv.ui.login.LoginFragment;
 import com.example.vcv.ui.signin.SigninFragment;
+import com.example.vcv.utility.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private boolean isLogginin = true;
+    private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        // Initialize Firebase DB
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Check if user is signed in (non-null) and update UI accordingly.
         // FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -146,6 +154,7 @@ public class LoginActivity extends AppCompatActivity {
         final String email = ((EditText) findViewById(R.id.et_email_signin)).getText().toString();
         String pssw = ((EditText) findViewById(R.id.et_password_signin)).getText().toString();
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
+        User user = new User(name, surname, telephone);
 
         if (pssw.equals(psswConfirm)) {
             mAuth.createUserWithEmailAndPassword(email, pssw)
@@ -183,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+            mDatabase.child("users").child(email).setValue(user);
         }
     }
 }

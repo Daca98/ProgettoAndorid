@@ -1,8 +1,10 @@
-package com.example.vcv;
+package com.example.vcv.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.vcv.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
