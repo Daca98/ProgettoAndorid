@@ -114,8 +114,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        String email = ((EditText) findViewById(R.id.et_email)).getText().toString();
-        String password = ((EditText) findViewById(R.id.et_password)).getText().toString();
+        // String email = ((EditText) findViewById(R.id.et_email)).getText().toString();
+        // String password = ((EditText) findViewById(R.id.et_password)).getText().toString();
+
+        String email = "mat.daca@gmail.com";
+        String password = "prova!";
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

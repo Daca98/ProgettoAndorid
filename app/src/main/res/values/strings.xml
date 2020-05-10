@@ -41,4 +41,6 @@
     <string name="choose_profile_pic_title">Choose your profile picture</string>
     <string name="hourWork">Hour you should work:</string>
     <string name="hourReallyWork">Hour you worked:</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="explain_forgot_password">Please, insert email address which you can access, so that we can send it reset password email</string>
 </resources>

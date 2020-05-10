@@ -40,4 +40,6 @@
     <string name="choose_profile_pic_title">Scegli la tua foto profilo</string>
     <string name="hourWork">Ore che dovevi lavorare:</string>
     <string name="hourReallyWork">Ore che hai effettivamente lavorato:</string>
+    <string name="forgot_password">Password dimenticata</string>
+    <string name="explain_forgot_password">Chiediamo gentilmente di inserire un indirizzo mail al quale si accesso, così che possiamo inviargli la mail di recupero password</string>
 </resources>

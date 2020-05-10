@@ -20,7 +20,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ForgotPasswordActivity"/>
+        <activity android:name=".ForgotPasswordActivity"
+            android:label="@string/forgot_password"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
