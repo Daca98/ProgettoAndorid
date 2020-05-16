@@ -1,13 +1,6 @@
 package com.example.vcv.ui.calendar;
 
-import android.content.Context;
-import android.content.Intent;
-import android.drm.DrmStore;
-import android.graphics.Color;
-import android.icu.util.ULocale;
 import android.os.Bundle;
-import android.util.EventLog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.vcv.MainActivity;
 import com.example.vcv.R;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;

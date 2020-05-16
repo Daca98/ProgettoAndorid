@@ -44,4 +44,9 @@
     <string name="explain_forgot_password">Chiediamo gentilmente di inserire un indirizzo mail al quale si accesso, così che possiamo inviargli la mail di recupero password</string>
     <string name="send_reset_pssw">Abbiamo inviato una mail all\'indirizzo specificato</string>
     <string name="send_reset_pssw_error">Ci sono stati dei problemi nell\'invio della mail a questo indirizzo mail</string>
+    <string name="badge_number">Matricola</string>
+    <string name="authentication_failed">Autenticazione fallita</string>
+    <string name="send_email_check">Una mail è stata inviata a</string>
+    <string name="send_email_error">Errore di invio della mail di verifica</string>
+    <string name="send">Invia</string>
 </resources>

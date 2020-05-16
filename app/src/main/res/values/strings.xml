@@ -45,4 +45,9 @@
     <string name="explain_forgot_password">Please, insert email address which you can access, so that we can send it reset password email</string>
     <string name="send_reset_pssw">We have sent an email to the specified address</string>
     <string name="send_reset_pssw_error">Some problems occurs when we try to send email to specified email address</string>
+    <string name="badge_number">Badge number</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="send_email_check">An email has been sent to</string>
+    <string name="send_email_error">Failed to send verification email</string>
+    <string name="send">Send</string>
 </resources>

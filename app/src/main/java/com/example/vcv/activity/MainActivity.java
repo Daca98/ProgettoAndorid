@@ -1,7 +1,8 @@
-package com.example.vcv;
+package com.example.vcv.activity;
 
 import android.os.Bundle;
 
+import com.example.vcv.R;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
