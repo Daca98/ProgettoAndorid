@@ -18,11 +18,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.example.vcv.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
+    private boolean isChangingPassword = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            isChangingPassword = b.getBoolean("isChangingPassword", false);
+        }
     }
 
     public void resetPassword(View view) {
@@ -37,8 +43,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                 Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw), Toast.LENGTH_SHORT).show();
                                 Log.d("", "Email sent");
 
-                                setResult(RESULT_OK);
-                                finish();
+                                if (isChangingPassword) {
+                                    FirebaseAuth.getInstance().signOut();
+                                    Intent myIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(myIntent);
+                                } else {
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }
                             } else {
                                 Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw_error), Toast.LENGTH_SHORT).show();
                                 Log.e("", "Can not send email reset password");

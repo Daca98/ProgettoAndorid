@@ -55,11 +55,12 @@ public class MyProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_myprofile, container, false);
 
-        Button b_forgetPassword = root.findViewById(R.id.b_change_password);
-        b_forgetPassword.setOnClickListener(new View.OnClickListener() {
+        Button b_changePassword = root.findViewById(R.id.b_change_password);
+        b_changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(root.getContext(), ForgotPasswordActivity.class);
+                myIntent.putExtra("isChangingPassword", true);
                 startActivity(myIntent);
             }
         });
