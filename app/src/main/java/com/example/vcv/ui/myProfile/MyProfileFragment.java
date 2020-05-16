@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -27,9 +28,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.vcv.activity.ForgotPasswordActivity;
 import com.example.vcv.R;
+import com.example.vcv.activity.MainActivity;
+import com.example.vcv.ui.calendar.CalendarViewModel;
+import com.example.vcv.utility.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +48,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MyProfileFragment extends Fragment {
 
+    private MyProfileViewModel myProfileViewModel;
     private static int RESULT_LOAD_IMAGE_FROM_GALLERY = 1;
     private static int RESULT_LOAD_IMAGE_FROM_CAMERA = 0;
     private static final String DIR_IMAGE_NAME = "imageDir";
@@ -52,7 +59,12 @@ public class MyProfileFragment extends Fragment {
         }
     };
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MyProfileViewModel.context = this.getContext();
+        myProfileViewModel =
+                ViewModelProviders.of(this).get(MyProfileViewModel.class);
+
         final View root = inflater.inflate(R.layout.fragment_myprofile, container, false);
 
         Button b_changePassword = root.findViewById(R.id.b_change_password);
@@ -62,6 +74,20 @@ public class MyProfileFragment extends Fragment {
                 Intent myIntent = new Intent(root.getContext(), ForgotPasswordActivity.class);
                 myIntent.putExtra("isChangingPassword", true);
                 startActivity(myIntent);
+            }
+        });
+
+        final EditText etName = root.findViewById(R.id.et_name_user_data);
+        final EditText etSurname = root.findViewById(R.id.et_surname_user_data);
+        final EditText etPhone = root.findViewById(R.id.et_telephone_user_data);
+        final EditText etEmail = root.findViewById(R.id.et_email_signin_user_data);
+        myProfileViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                etName.setText(user.name);
+                etSurname.setText(user.surname);
+                etPhone.setText(user.telephone);
+                etEmail.setText(user.email);
             }
         });
 

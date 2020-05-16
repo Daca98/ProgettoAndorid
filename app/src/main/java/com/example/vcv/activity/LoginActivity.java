@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.vcv.R;
 import com.example.vcv.ui.login.LoginFragment;
 import com.example.vcv.ui.signin.SigninFragment;
+import com.example.vcv.utility.QueryDB;
 import com.example.vcv.utility.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,8 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -161,6 +165,25 @@ public class LoginActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if (user != null) {
                                     if (task.isSuccessful() && user.isEmailVerified()) {
+                                        // Download firebase data and insert them in sqlite
+                                        DatabaseReference dbFirebase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+                                        dbFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                User completeUser = dataSnapshot.getValue(User.class);
+
+                                                if (completeUser != null) {
+                                                    QueryDB db = new QueryDB(LoginActivity.this);
+                                                    db.insertUserData(completeUser);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Log.e("", databaseError.getMessage());
+                                            }
+                                        });
+
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("", "signInWithEmail:success");
                                         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
