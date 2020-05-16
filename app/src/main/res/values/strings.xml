@@ -43,4 +43,6 @@
     <string name="hourReallyWork">Hour you worked:</string>
     <string name="forgot_password">Forgot password</string>
     <string name="explain_forgot_password">Please, insert email address which you can access, so that we can send it reset password email</string>
+    <string name="send_reset_pssw">We have sent an email to the specified address</string>
+    <string name="send_reset_pssw_error">Some problems occurs when we try to send email to specified email address</string>
 </resources>

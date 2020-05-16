@@ -3,10 +3,12 @@ package com.example.vcv;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,7 +32,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d("", "Email sent.");
+                                Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw), Toast.LENGTH_SHORT).show();
+                                Log.d("", "Email sent");
+                                Intent myIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                                startActivity(myIntent);
+                            } else {
+                                Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw_error), Toast.LENGTH_SHORT).show();
+                                Log.e("", "Can not send email reset password");
                             }
                         }
                     });

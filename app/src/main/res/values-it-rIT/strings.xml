@@ -42,4 +42,6 @@
     <string name="hourReallyWork">Ore che hai effettivamente lavorato:</string>
     <string name="forgot_password">Password dimenticata</string>
     <string name="explain_forgot_password">Chiediamo gentilmente di inserire un indirizzo mail al quale si accesso, così che possiamo inviargli la mail di recupero password</string>
+    <string name="send_reset_pssw">Abbiamo inviato una mail all\'indirizzo specificato</string>
+    <string name="send_reset_pssw_error">Ci sono stati dei problemi nell\'invio della mail a questo indirizzo mail</string>
 </resources>
