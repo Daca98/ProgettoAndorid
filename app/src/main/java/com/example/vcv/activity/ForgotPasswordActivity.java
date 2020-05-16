@@ -36,8 +36,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw), Toast.LENGTH_SHORT).show();
                                 Log.d("", "Email sent");
-                                Intent myIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                                startActivity(myIntent);
+
+                                setResult(RESULT_OK);
+                                finish();
                             } else {
                                 Toast.makeText(ForgotPasswordActivity.this, getString(R.string.send_reset_pssw_error), Toast.LENGTH_SHORT).show();
                                 Log.e("", "Can not send email reset password");

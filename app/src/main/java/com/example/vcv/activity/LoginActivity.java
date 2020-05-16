@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class LoginActivity extends AppCompatActivity {
+    private int REQUEST_CODE_FORGOT_PASSWORD = 0;
     private FirebaseAuth mAuth;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgotPassword(View view) {
         Intent myIntent = new Intent(this, ForgotPasswordActivity.class);
-        startActivity(myIntent);
+        startActivityForResult(myIntent, REQUEST_CODE_FORGOT_PASSWORD);
     }
 
     // Utility
