@@ -19,7 +19,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -49,11 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Firebase DB
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        System.out.println(mAuth.getUid());
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        // FirebaseUser currentUser = mAuth.getCurrentUser();
-        // System.out.println("currentUser " + currentUser);
+        // Check if currentUser is signed in (non-null)
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // TODO: check with finger print or face recognition
+            login(currentUser);
+        }
     }
 
     // Handler
@@ -81,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void access(View view) {
         if (isLogginin) {
-            login();
+            login(null);
         } else {
             signin();
         }
@@ -125,30 +128,50 @@ public class LoginActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void login() {
-        String email = ((EditText) findViewById(R.id.et_email)).getText().toString();
-        String password = ((EditText) findViewById(R.id.et_password)).getText().toString();
+    private void login(FirebaseUser user) {
+        String email = "";
+        String password = "";
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        if (user != null) {
+            try {
+                user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            if (task.isSuccessful() && user.isEmailVerified()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("", "signInWithEmail:success");
-                                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(myIntent);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("", "signInWithEmail:success");
+                            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(myIntent);
                         }
                     }
                 });
+            } catch (Exception e) {
+                Log.e("", e.getMessage());
+            }
+        } else {
+            email = ((EditText) findViewById(R.id.et_email)).getText().toString();
+            password = ((EditText) findViewById(R.id.et_password)).getText().toString();
+
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                if (task.isSuccessful() && user.isEmailVerified()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d("", "signInWithEmail:success");
+                                    Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(myIntent);
+                                } else {
+                                    // If sign goes wrong, display a message to the user
+                                    Log.w("", "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+        }
     }
 
     private void signin() {
@@ -156,9 +179,10 @@ public class LoginActivity extends AppCompatActivity {
         final String surname = ((EditText) findViewById(R.id.et_surname)).getText().toString();
         final String telephone = ((EditText) findViewById(R.id.et_telephone)).getText().toString();
         final String email = ((EditText) findViewById(R.id.et_email_signin)).getText().toString();
+        final String badgeNumber = ((EditText) findViewById(R.id.et_badge_number_signin)).getText().toString();
         String pssw = ((EditText) findViewById(R.id.et_password_signin)).getText().toString();
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
-        final User user = new User(name, surname, telephone);
+        final User user = new User(name, surname, telephone, badgeNumber, email);
 
         if (pssw.equals(psswConfirm)) {
             mAuth.createUserWithEmailAndPassword(email, pssw)
@@ -176,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 public void onComplete(@NonNull Task task) {
                                                     if (task.isSuccessful()) {
                                                         Toast.makeText(LoginActivity.this,
-                                                                "Verification email sent to " + email,
+                                                                getString(R.string.send_email_check) + email,
                                                                 Toast.LENGTH_SHORT).show();
 
                                                         // Initialize Firebase DB
@@ -185,33 +209,28 @@ public class LoginActivity extends AppCompatActivity {
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
-                                                                        Toast.makeText(LoginActivity.this,
-                                                                                "Oggetto inserito con successo",
-                                                                                Toast.LENGTH_SHORT).show();
+                                                                        Log.i("", "User added with success to user's collection");
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
                                                                         Log.e("", e.getMessage());
-                                                                        Toast.makeText(LoginActivity.this,
-                                                                                "Errore inserimento",
-                                                                                Toast.LENGTH_SHORT).show();
                                                                     }
                                                                 });
                                                     } else {
                                                         Log.e("", "sendEmailVerification", task.getException());
                                                         Toast.makeText(LoginActivity.this,
-                                                                "Failed to send verification email.",
+                                                                getString(R.string.send_email_error),
                                                                 Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             });
                                 }
                             } else {
-                                // If sign in fails, display a message to the user.
+                                // If sign in goes wrong, display a message to the userf
                                 Log.w("", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

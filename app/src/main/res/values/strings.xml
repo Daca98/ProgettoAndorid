@@ -41,4 +41,8 @@
     <string name="choose_profile_pic_title">Choose your profile picture</string>
     <string name="hourWork">Hour you should work:</string>
     <string name="hourReallyWork">Hour you worked:</string>
+    <string name="badge_number">Badge number</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="send_email_check">An email has been sent to</string>
+    <string name="send_email_error">Failed to send verification email</string>
 </resources>

@@ -40,4 +40,8 @@
     <string name="choose_profile_pic_title">Scegli la tua foto profilo</string>
     <string name="hourWork">Ore che dovevi lavorare:</string>
     <string name="hourReallyWork">Ore che hai effettivamente lavorato:</string>
+    <string name="badge_number">Matricola</string>
+    <string name="authentication_failed">Autenticazione fallita</string>
+    <string name="send_email_check">Una mail è stata inviata a</string>
+    <string name="send_email_error">Errore di invio della mail di verifica</string>
 </resources>
