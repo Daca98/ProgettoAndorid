@@ -155,8 +155,8 @@
                             android:hint="@string/job"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_work_black_24dp"
-                            android:drawableLeft="@drawable/ic_work_black_24dp" />
+                            android:drawableStart="@drawable/work"
+                            android:drawableLeft="@drawable/work" />
                     </LinearLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -171,8 +171,8 @@
                             android:hint="@string/StartHour"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_access_time_black_24dp"
-                            android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time"
                             android:layout_alignParentLeft="true"/>
                         <EditText
                             android:id="@+id/et_endHour"
@@ -181,8 +181,8 @@
                             android:hint="@string/endHour"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_access_time_black_24dp"
-                            android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time"
                             android:layout_alignParentRight="true"/>
                     </RelativeLayout>
                     <LinearLayout
@@ -198,8 +198,8 @@
                             android:hint="@string/totalHour"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_access_time_black_24dp"
-                            android:drawableLeft="@drawable/ic_access_time_black_24dp" />
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time" />
                         <EditText
                             android:id="@+id/et_extraordinaryHour"
                             android:layout_width="match_parent"
@@ -207,8 +207,8 @@
                             android:hint="@string/extraordinary"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_access_time_black_24dp"
-                            android:drawableLeft="@drawable/ic_access_time_black_24dp" />
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time" />
                         <EditText
                             android:id="@+id/et_equipment"
                             android:layout_width="match_parent"
@@ -216,8 +216,8 @@
                             android:hint="@string/equipment"
                             android:layout_marginBottom="15dp"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/ic_build_black_24dp"
-                            android:drawableLeft="@drawable/ic_build_black_24dp" />
+                            android:drawableStart="@drawable/build"
+                            android:drawableLeft="@drawable/build" />
                         <EditText
                             android:id="@+id/et_note"
                             android:layout_width="match_parent"

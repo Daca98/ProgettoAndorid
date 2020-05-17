@@ -4,22 +4,22 @@
 
     <item
         android:id="@+id/navigation_calendar"
-        android:icon="@drawable/ic_date_range_black_24dp"
+        android:icon="@drawable/data_range"
         android:title="@string/title_calendar"/>
 
     <item
         android:id="@+id/navigation_myProfile"
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/person"
         android:title="@string/title_myProfile"/>
 
     <item
         android:id="@+id/navigation_path"
-        android:icon="@drawable/ic_map_black_24dp"
+        android:icon="@drawable/map"
         android:title="@string/title_path"/>
 
     <item
         android:id="@+id/navigation_hourMonth"
-        android:icon="@drawable/ic_access_time_black_24dp"
+        android:icon="@drawable/time"
         android:title="@string/title_hourMonth"/>
 
 </menu>
