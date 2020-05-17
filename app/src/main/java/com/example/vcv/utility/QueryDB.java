@@ -41,11 +41,34 @@ public class QueryDB {
         if (cursor.moveToFirst()) {
             do {
                 // get the data into array, or class variable
-                user = new User(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+                user = new User(cursor.getString(0), cursor.getString(1), cursor.getString(4), cursor.getString(3), cursor.getString(2));
             } while (cursor.moveToNext());
         }
         cursor.close();
 
         return user;
+    }
+
+    public int updateUser(User user) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ContractLocalDB.COLUMN_NAME_USER_NAME, user.name);
+        values.put(ContractLocalDB.COLUMN_NAME_USER_SURNAME, user.surname);
+        values.put(ContractLocalDB.COLUMN_NAME_USER_TELEPHONE, user.telephone);
+
+        int rowUpdated = db.update(ContractLocalDB.TABLE_NAME_USER, values, ContractLocalDB.COLUMN_NAME_USER_BADGE_NUMBER + " = ?", new String[]{user.badgeNumber});
+
+        return rowUpdated;
+    }
+
+    public void cleanLogout() {
+        cleanUser();
+    }
+
+    private void cleanUser() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.execSQL("DELETE FROM " + ContractLocalDB.TABLE_NAME_USER);
     }
 }

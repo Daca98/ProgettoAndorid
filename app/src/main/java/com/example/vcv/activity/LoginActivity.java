@@ -144,9 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("", "signInWithEmail:success");
-                            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(myIntent);
+                            goToMainActivity();
                         }
                     }
                 });
@@ -184,10 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         });
 
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d("", "signInWithEmail:success");
-                                        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(myIntent);
+                                        goToMainActivity();
                                     } else {
                                         // If sign goes wrong, display a message to the user
                                         Log.w("", "signInWithEmail:failure", task.getException());
@@ -269,5 +264,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void goToMainActivity() {
+        Log.d("", "signInWithEmail:success");
+        ((EditText) findViewById(R.id.et_email)).setText("");
+        ((EditText) findViewById(R.id.et_password)).setText("");
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(myIntent);
     }
 }

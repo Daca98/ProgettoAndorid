@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.vcv.R;
+import com.example.vcv.utility.QueryDB;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.logoff) {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
+            QueryDB db = new QueryDB(MainActivity.this);
+            db.cleanLogout();
             finish();
             return true;
         }

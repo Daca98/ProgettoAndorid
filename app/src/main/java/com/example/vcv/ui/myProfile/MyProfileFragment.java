@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MyProfileFragment extends Fragment {
 
+    private User user;
     private MyProfileViewModel myProfileViewModel;
     private static int RESULT_LOAD_IMAGE_FROM_GALLERY = 1;
     private static int RESULT_LOAD_IMAGE_FROM_CAMERA = 0;
@@ -80,14 +82,17 @@ public class MyProfileFragment extends Fragment {
         final EditText etName = root.findViewById(R.id.et_name_user_data);
         final EditText etSurname = root.findViewById(R.id.et_surname_user_data);
         final EditText etPhone = root.findViewById(R.id.et_telephone_user_data);
-        final EditText etEmail = root.findViewById(R.id.et_email_signin_user_data);
+        final TextView etEmail = root.findViewById(R.id.et_email_signin_user_data);
         myProfileViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
-            public void onChanged(@Nullable User user) {
-                etName.setText(user.name);
-                etSurname.setText(user.surname);
-                etPhone.setText(user.telephone);
-                etEmail.setText(user.email);
+            public void onChanged(@Nullable User u) {
+                if (u != null) {
+                    user = u;
+                    etName.setText(u.name);
+                    etSurname.setText(u.surname);
+                    etPhone.setText(u.telephone);
+                    etEmail.setText(u.email);
+                }
             }
         });
 
@@ -112,6 +117,14 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 removeImageFromStorage();
+            }
+        });
+
+        Button b_saveChanges = root.findViewById(R.id.save_changes);
+        b_saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveChanges();
             }
         });
 
@@ -186,6 +199,18 @@ public class MyProfileFragment extends Fragment {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void saveChanges() {
+        String name = ((EditText) getActivity().findViewById(R.id.et_name_user_data)).getText() + "";
+        String surname = ((EditText) getActivity().findViewById(R.id.et_surname_user_data)).getText() + "";
+        String telephone = ((EditText) getActivity().findViewById(R.id.et_telephone_user_data)).getText() + "";
+
+        if ((!name.equals("") && !name.equals(user.name)) || (!surname.equals("") && !surname.equals(user.surname)) || (!telephone.equals("") && !telephone.equals(user.telephone))) {
+            myProfileViewModel.writeNewDataInDB(new User(name, surname, telephone, user.badgeNumber, user.email));
+        } else {
+            Toast.makeText(getContext(), getString(R.string.change_field), Toast.LENGTH_SHORT).show();
         }
     }
 

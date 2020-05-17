@@ -50,4 +50,6 @@
     <string name="send_email_check">An email has been sent to</string>
     <string name="send_email_error">Failed to send verification email</string>
     <string name="send">Send</string>
+    <string name="reset_password">Reset password</string>
+    <string name="change_field">Wrong data</string>
 </resources>

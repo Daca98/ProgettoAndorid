@@ -12,7 +12,7 @@
 
         <activity
             android:name=".activity.ForgotPasswordActivity"
-            android:label="@string/forgot_password" />
+            android:label="@string/reset_password" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

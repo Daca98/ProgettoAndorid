@@ -49,4 +49,6 @@
     <string name="send_email_check">Una mail è stata inviata a</string>
     <string name="send_email_error">Errore di invio della mail di verifica</string>
     <string name="send">Invia</string>
+    <string name="reset_password">Reset password</string>
+    <string name="change_field">Dati errati</string>
 </resources>
