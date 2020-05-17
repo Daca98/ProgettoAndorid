@@ -154,12 +154,10 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginLeft="25dp"
-                        android:background="@drawable/button_confirm"
                         android:text="@string/confirm"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="12sp"/>
+                        style="@style/ButtonStyle"/>
 
                     <Button
                         android:id="@+id/button_modify"
@@ -169,10 +167,8 @@
                         android:layout_marginRight="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/button_confirm"
                         android:text="@string/modify"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="12sp" />
+                        style="@style/ButtonStyle"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
