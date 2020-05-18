@@ -52,4 +52,8 @@
     <string name="send">Send</string>
     <string name="reset_password">Reset password</string>
     <string name="change_field">Wrong data</string>
+    <string name="biometric_negative">Use account password</string>
+    <string name="biometric_subtitle">Log in using your biometric credential</string>
+    <string name="biometric_title">Biometric login</string>
+    <string name="authentication_succes">Authentication succes</string>
 </resources>

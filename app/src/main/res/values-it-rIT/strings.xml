@@ -51,4 +51,8 @@
     <string name="send">Invia</string>
     <string name="reset_password">Reset password</string>
     <string name="change_field">Dati errati</string>
+    <string name="biometric_negative">Utilizza credenziali</string>
+    <string name="biometric_title">Login biometrico</string>
+    <string name="biometric_subtitle">Accedi con la tua impronta biometrica</string>
+    <string name="authentication_succes">Autenticazione riuscita</string>
 </resources>

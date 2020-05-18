@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
@@ -31,9 +30,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.concurrent.Executor;
 
 public class LoginActivity extends AppCompatActivity {
     private int REQUEST_CODE_FORGOT_PASSWORD = 0;
@@ -42,6 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private boolean isLogginin = true;
     private DatabaseReference mDatabase;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+    FirebaseUser currentUser;
 
 
     @Override
@@ -49,6 +57,43 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         insertFragmentLogin();
+
+        //initialize for biometric authentication
+        executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(LoginActivity.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode,
+                                              @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.authentication_failed) + errString, Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(
+                    @NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getApplicationContext(),
+                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                login(currentUser);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), getString(R.string.authentication_failed),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getString(R.string.biometric_title))
+                .setSubtitle(getString(R.string.biometric_subtitle))
+                .setNegativeButtonText(getString(R.string.biometric_negative))
+                .setConfirmationRequired(false)
+                .build();
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -59,8 +104,11 @@ public class LoginActivity extends AppCompatActivity {
         // Check if currentUser is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // TODO: check with finger print or face recognition
-            login(currentUser);
+            //check with finger print or face recognition
+            BiometricManager biometricManager = BiometricManager.from(this);
+            if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+                biometricPrompt.authenticate(promptInfo);
+            }
         }
     }
 
