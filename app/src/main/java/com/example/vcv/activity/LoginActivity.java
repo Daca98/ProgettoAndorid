@@ -67,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                                               @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 Toast.makeText(getApplicationContext(),
-                        getString(R.string.authentication_failed) + errString, Toast.LENGTH_SHORT)
+                        getString(R.string.authentication_failed), Toast.LENGTH_SHORT)
                         .show();
+                logout();
             }
 
             @Override
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),
-                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                        getString(R.string.authentication_succes), Toast.LENGTH_SHORT).show();
                 login(currentUser);
             }
 
@@ -102,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Check if currentUser is signed in (non-null)
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             //check with finger print or face recognition
             BiometricManager biometricManager = BiometricManager.from(this);
@@ -312,6 +313,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void logout()
+    {
+        mAuth.signOut();
+        QueryDB db = new QueryDB(LoginActivity.this);
+        db.cleanLogout();
     }
 
     private void goToMainActivity() {
