@@ -1,9 +1,6 @@
 package com.example.vcv.utility;
 
-import com.google.firebase.database.IgnoreExtraProperties;
-
 public class User {
-
     public String name;
     public String surname;
     public String telephone;

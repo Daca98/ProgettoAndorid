@@ -30,8 +30,8 @@ public class CalendarFragment extends Fragment {
     private CompactCalendarView compactCalendar;
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        CalendarViewModel.context = this.getContext();
         calendarViewModel =
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
@@ -44,6 +44,8 @@ public class CalendarFragment extends Fragment {
         String month = dateFormatMonth.format(Calendar.getInstance().getTime());
         String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
         textView.setText(monthCapitalize);
+
+        calendarViewModel.downloadDataFromFirebase(new Date());
 
         //evento test
         try {
