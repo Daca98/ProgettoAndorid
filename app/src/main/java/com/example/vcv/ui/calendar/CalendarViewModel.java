@@ -67,7 +67,7 @@ public class CalendarViewModel extends ViewModel {
         calendarEnd.set(Calendar.MILLISECOND, 0);
         Timestamp endTimeStamp = new Timestamp(calendarEnd.getTime().getTime());
 
-        if (user.badgeNumber != null) {
+        if (user != null && user.badgeNumber != null) {
             // TODO: make specific call for a specific day
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber); //.orderByKey().startAt(startTimeStamp.toString()).endAt(endTimeStamp.toString());
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
