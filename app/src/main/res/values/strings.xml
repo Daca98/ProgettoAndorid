@@ -56,4 +56,5 @@
     <string name="biometric_subtitle">Log in using your biometric credential</string>
     <string name="biometric_title">Biometric login</string>
     <string name="authentication_succes">Authentication succes</string>
+    <string name="new_notification">You have new orders, check out your calendar</string>
 </resources>

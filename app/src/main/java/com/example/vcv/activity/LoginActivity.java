@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.Locale;
 import java.util.concurrent.Executor;
 
 public class LoginActivity extends AppCompatActivity {
@@ -315,8 +317,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void logout()
-    {
+    private void logout() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
+            }
+        });
         mAuth.signOut();
         QueryDB db = new QueryDB(LoginActivity.this);
         db.cleanLogout();
@@ -328,5 +335,9 @@ public class LoginActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.et_password)).setText("");
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(myIntent);
+    }
+
+    private String getLocaleTopic() {
+        return "all-" + Locale.getDefault().getLanguage();
     }
 }
