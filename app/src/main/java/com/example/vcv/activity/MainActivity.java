@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getApplicationContext(), "Rimosso dal gruppo ALL GIGI", Toast.LENGTH_LONG).show();
                     Log.d("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
                 }
             });
