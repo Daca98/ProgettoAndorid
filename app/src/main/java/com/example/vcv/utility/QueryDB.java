@@ -88,10 +88,11 @@ public class QueryDB {
         for (CalendarOrder calendarOrder : calendarOrders) {
             // Create a new map of values, where column names are the keys
             ContentValues values = new ContentValues();
+            values.put(ContractLocalDB.COLUMN_NAME_ORDER_ID, calendarOrder.ID);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_DATE, calendarOrder.dateCalendarOrder);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM, calendarOrder.hourFrom);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_TO, calendarOrder.hourTo);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK, calendarOrder.dftHourToWork);
+            values.put(ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK, calendarOrder.defaultHourToWork);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_JOB, calendarOrder.job);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_CONFIRMED, calendarOrder.confirmed);
             values.put(ContractLocalDB.COLUMN_NAME_ORDER_EQUIPMENT, calendarOrder.equipment);
@@ -136,7 +137,7 @@ public class QueryDB {
 
         if (cursor.moveToFirst()) {
             do {
-                calendarOrders.add(new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7)));
+                calendarOrders.add(new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), Boolean.getBoolean(cursor.getString(6)), cursor.getString(7), cursor.getString(8)));
             } while (cursor.moveToNext());
         }
         cursor.close();

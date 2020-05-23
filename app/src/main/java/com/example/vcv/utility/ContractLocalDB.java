@@ -29,11 +29,12 @@ public class ContractLocalDB extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_USER;
 
     // Table order
+    public static final String COLUMN_NAME_ORDER_ID = "ID";
     public static final String TABLE_NAME_ORDER = "CalendarOrder";
     public static final String COLUMN_NAME_ORDER_DATE = "DateCalendarOrder";
     public static final String COLUMN_NAME_ORDER_HOUR_FROM = "HourFrom";
     public static final String COLUMN_NAME_ORDER_HOUR_TO = "HourTo";
-    public static final String COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK = "DftHourToWork";
+    public static final String COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK = "DefaultHourToWork";
     public static final String COLUMN_NAME_ORDER_JOB = "Job";
     public static final String COLUMN_NAME_ORDER_CONFIRMED = "Confirmed";
     public static final String COLUMN_NAME_ORDER_EQUIPMENT = "Equipment";
@@ -41,7 +42,8 @@ public class ContractLocalDB extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ORDER =
             "CREATE TABLE " + ContractLocalDB.TABLE_NAME_ORDER + " (" +
-                    ContractLocalDB.COLUMN_NAME_ORDER_DATE + " TEXT PRIMARY KEY," +
+                    ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM + " TEXT PRIMARY KEY," +
+                    ContractLocalDB.COLUMN_NAME_ORDER_DATE + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_HOUR_TO + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK + " TEXT," +

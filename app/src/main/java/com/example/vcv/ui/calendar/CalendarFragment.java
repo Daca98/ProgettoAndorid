@@ -8,17 +8,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.vcv.R;
+import com.example.vcv.utility.CalendarOrder;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -29,6 +33,7 @@ public class CalendarFragment extends Fragment {
     private CalendarViewModel calendarViewModel;
     private CompactCalendarView compactCalendar;
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    private ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
@@ -36,6 +41,11 @@ public class CalendarFragment extends Fragment {
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        try {
+            calendarViewModel.changeData(new Date());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Button modify = (Button) root.findViewById(R.id.button_modify);
         compactCalendar = (CompactCalendarView) root.findViewById(R.id.compactcalendar_view);
 
@@ -44,8 +54,6 @@ public class CalendarFragment extends Fragment {
         String month = dateFormatMonth.format(Calendar.getInstance().getTime());
         String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
         textView.setText(monthCapitalize);
-
-        calendarViewModel.downloadDataFromFirebase(new Date());
 
         //evento test
         try {
@@ -92,12 +100,12 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        /*calendarViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        calendarViewModel.getCalendar().observe(getViewLifecycleOwner(), new Observer<ArrayList<CalendarOrder>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(@Nullable ArrayList<CalendarOrder> s) {
+                calendarOrders.addAll(s);
             }
-        });*/
+        });
 
         return root;
     }

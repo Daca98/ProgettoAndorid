@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -26,17 +27,20 @@ import androidx.lifecycle.ViewModel;
 
 public class CalendarViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<ArrayList<CalendarOrder>> mCalendarOrders;
     public static Context context;
     private static QueryDB db;
 
     public CalendarViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is calendar fragment");
+        mCalendarOrders = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void changeData(Date date) throws InterruptedException {
+        mCalendarOrders.setValue(downloadDataFromFirebase(date));
+    }
+
+    public LiveData<ArrayList<CalendarOrder>> getCalendar() {
+        return mCalendarOrders;
     }
 
     private User getUserFromLocalDB() {
@@ -44,8 +48,9 @@ public class CalendarViewModel extends ViewModel {
         return db.readUser();
     }
 
-    public void downloadDataFromFirebase(Date date) {
+    public ArrayList<CalendarOrder>  downloadDataFromFirebase(Date date) throws InterruptedException {
         User user = getUserFromLocalDB();
+        final ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
 
         // Get timestamp of Monday of current date
         Calendar calendarStart = Calendar.getInstance();
@@ -67,17 +72,18 @@ public class CalendarViewModel extends ViewModel {
         calendarEnd.set(Calendar.MILLISECOND, 0);
         Timestamp endTimeStamp = new Timestamp(calendarEnd.getTime().getTime());
 
+        final Semaphore semaphore = new Semaphore(0);
+
         if (user != null && user.badgeNumber != null) {
-            // TODO: make specific call for a specific day
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber); //.orderByKey().startAt(startTimeStamp.toString()).endAt(endTimeStamp.toString());
+            Query ref = FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).orderByChild("dateCalendarOrder").startAt(startTimeStamp.toString().split("\\.")[0]).endAt(endTimeStamp.toString().split("\\.")[0]);
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
-
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                        calendarOrders.add(snap.getValue(CalendarOrder.class));
-                        System.out.println(snap.getValue(CalendarOrder.class)); // TODO: fix crash
+                        CalendarOrder order = snap.getValue(CalendarOrder.class);
+                        order.ID = snap.getKey();
+                        calendarOrders.add(order);
+                        semaphore.release();
                     }
                 }
 
@@ -87,5 +93,7 @@ public class CalendarViewModel extends ViewModel {
                 }
             });
         }
+        semaphore.acquire();
+        return calendarOrders;
     }
 }
