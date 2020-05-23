@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,33 +80,30 @@ public class QueryDB {
     }
 
     // Query for calendar order
-    public long insertCalendarOrderData(ArrayList<CalendarOrder> calendarOrders) {
+    public long insertSingleCalendarOrderData(CalendarOrder calendarOrder) {
         long newRowCount = 0;
 
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        for (CalendarOrder calendarOrder : calendarOrders) {
-            // Create a new map of values, where column names are the keys
-            ContentValues values = new ContentValues();
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_ID, calendarOrder.ID);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_DATE, calendarOrder.dateCalendarOrder);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM, calendarOrder.hourFrom);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_TO, calendarOrder.hourTo);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK, calendarOrder.defaultHourToWork);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_JOB, calendarOrder.job);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_CONFIRMED, calendarOrder.confirmed);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_EQUIPMENT, calendarOrder.equipment);
-            values.put(ContractLocalDB.COLUMN_NAME_ORDER_NOTE, calendarOrder.note);
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_DATE, calendarOrder.dateCalendarOrder);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM, calendarOrder.hourFrom);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_HOUR_TO, calendarOrder.hourTo);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK, calendarOrder.defaultHourToWork);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_JOB, calendarOrder.job);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_CONFIRMED, calendarOrder.confirmed);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_EQUIPMENT, calendarOrder.equipment);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_NOTE, calendarOrder.note);
 
-            // Insert the new row, returning the primary key value of the new row
-            newRowCount += db.insert(ContractLocalDB.TABLE_NAME_ORDER, null, values);
-        }
+        // Insert the new row, returning the primary key value of the new row
+        newRowCount = db.insert(ContractLocalDB.TABLE_NAME_ORDER, null, values);
 
         return newRowCount;
     }
 
-    public ArrayList<CalendarOrder> readCalendarOrder(Date date) {
+    public ArrayList<CalendarOrder> readCalendarOrderSixDays(Date date) {
         ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
 
         // Get timestamp of Monday of current date
@@ -137,7 +135,7 @@ public class QueryDB {
 
         if (cursor.moveToFirst()) {
             do {
-                calendarOrders.add(new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), Boolean.getBoolean(cursor.getString(6)), cursor.getString(7), cursor.getString(8)));
+                calendarOrders.add(new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -145,5 +143,24 @@ public class QueryDB {
         return calendarOrders;
     }
 
+    public CalendarOrder readCalendarOrderSingleDay(Date date) {
+        CalendarOrder calendarOrder = null;
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selectQuery = "SELECT  * " +
+                "FROM " + ContractLocalDB.TABLE_NAME_ORDER + " " +
+                "WHERE " + ContractLocalDB.COLUMN_NAME_ORDER_DATE + "='" + (new SimpleDateFormat("yyyy-MM-dd").format(date)) + "'";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                calendarOrder = new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return calendarOrder;
+    }
 
 }

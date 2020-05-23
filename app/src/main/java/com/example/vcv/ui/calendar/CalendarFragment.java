@@ -20,6 +20,8 @@ import com.example.vcv.utility.CalendarOrder;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,12 +36,18 @@ public class CalendarFragment extends Fragment {
     private CompactCalendarView compactCalendar;
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
+    TextView hourStart;
+    TextView hourEnd;
+    TextView job;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
         calendarViewModel =
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
+        hourStart = root.findViewById(R.id.HourStart);
+        hourEnd = root.findViewById(R.id.HourEnd);
+        job = root.findViewById(R.id.job);
 
         try {
             calendarViewModel.changeData(new Date());
@@ -77,6 +85,21 @@ public class CalendarFragment extends Fragment {
                 /*if(dateClicked.toString().compareTo("data")) {
                     //modifica campi
                 }*/
+                Calendar calendarSubDays = Calendar.getInstance();
+                calendarSubDays.setTime(new Date());
+                calendarSubDays.add(Calendar.DATE, -6);
+
+                if (dateClicked.compareTo(calendarSubDays.getTime()) >= 0) {
+                    // TODO: PRENDERE DA FIREBASE I DATI DEGLI ULTIMI 14 GIORNI
+                } else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateClicked);
+                    calendar.set(Calendar.HOUR_OF_DAY, 2);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+                    calendar.set(Calendar.MILLISECOND, 0);
+                    calendarViewModel.getOldDay(calendar.getTime(), hourStart, hourEnd, job);
+                }
             }
 
             //quando scorro tra i mesi
@@ -94,7 +117,7 @@ public class CalendarFragment extends Fragment {
                 ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment,"modifyCalendarFragment");
+                fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment, "modifyCalendarFragment");
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

@@ -2,7 +2,6 @@ package com.example.vcv.utility;
 
 public class CalendarOrder {
 
-    public String ID;
     public String dateCalendarOrder;
     public String hourFrom;
     public String hourTo;
@@ -15,8 +14,7 @@ public class CalendarOrder {
     public CalendarOrder() {
     }
 
-    public CalendarOrder(String ID, String dateCalendarOrder, String hourFrom, String hourTo, String dftHourToWork, String job, Boolean confirmed, String equipment, String note) {
-        this.ID = ID;
+    public CalendarOrder(String dateCalendarOrder, String hourFrom, String hourTo, String dftHourToWork, String job, Boolean confirmed, String equipment, String note) {
         this.dateCalendarOrder = dateCalendarOrder;
         this.hourFrom = hourFrom;
         this.hourTo = hourTo;

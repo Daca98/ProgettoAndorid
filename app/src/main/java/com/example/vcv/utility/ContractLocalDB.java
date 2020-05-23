@@ -42,8 +42,7 @@ public class ContractLocalDB extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ORDER =
             "CREATE TABLE " + ContractLocalDB.TABLE_NAME_ORDER + " (" +
-                    ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM + " TEXT PRIMARY KEY," +
-                    ContractLocalDB.COLUMN_NAME_ORDER_DATE + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_ORDER_DATE + " TEXT PRIMARY KEY," +
                     ContractLocalDB.COLUMN_NAME_ORDER_HOUR_FROM + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_HOUR_TO + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_DFT_HOUR_TO_WORK + " TEXT," +
