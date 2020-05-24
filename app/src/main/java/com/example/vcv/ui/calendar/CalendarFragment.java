@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,6 +41,11 @@ public class CalendarFragment extends Fragment {
     TextView job;
     private Date today = new Date();
     private CalendarOrder currentOrder = null;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
@@ -105,7 +111,7 @@ public class CalendarFragment extends Fragment {
         //Listener to open modify calendar
         modify.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment();
+                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment(currentOrder);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment, "modifyCalendarFragment");

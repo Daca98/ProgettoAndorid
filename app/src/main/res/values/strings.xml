@@ -59,4 +59,6 @@
     <string name="no_information">No information available</string>
     <string name="day_confirmed">You have confirmed your daily order</string>
     <string name="detail">Detail</string>
+    <string name="please_change_fields">Please change fields, or check its format, to save</string>
+    <string name="save_data_success">Data saved with success</string>
 </resources>

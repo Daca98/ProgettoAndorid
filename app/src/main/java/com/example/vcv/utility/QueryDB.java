@@ -115,7 +115,11 @@ public class QueryDB {
 
         if (cursor.moveToFirst()) {
             do {
-                calendarOrder = new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7));
+                try {
+                    calendarOrder = new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
