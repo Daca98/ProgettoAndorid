@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,13 +36,10 @@ public class CalendarViewModel extends ViewModel {
     private MutableLiveData<ArrayList<CalendarOrder>> mCalendarOrders;
     public static Context context;
     private static QueryDB db;
+    public static CalendarFragment calendarFragment;
 
     public CalendarViewModel() {
         mCalendarOrders = new MutableLiveData<>();
-    }
-
-    public void changeData(Date date) throws InterruptedException {
-        mCalendarOrders.setValue(downloadDataFromFirebase(date));
     }
 
     public LiveData<ArrayList<CalendarOrder>> getCalendar() {
@@ -53,31 +51,34 @@ public class CalendarViewModel extends ViewModel {
         return db.readUser();
     }
 
-    public ArrayList<CalendarOrder> downloadDataFromFirebase(Date date) {
+    public void downloadDataFromFirebase() {
         User user = getUserFromLocalDB();
-        final ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
 
         if (user != null && user.badgeNumber != null) {
             FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).limitToLast(14).addChildEventListener(
                     new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            Toast.makeText(context, "onChildAdded", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "onChildAdded", Toast.LENGTH_SHORT).show();
                             CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
                             Date date = new Date(Long.parseLong(dataSnapshot.getKey())*1000L);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             sdf.setTimeZone(TimeZone.getDefault());
                             order.dateCalendarOrder = sdf.format(date);
-                            calendarOrders.add(order);
+                            try {
+                                calendarFragment.setCalendar(order);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            Toast.makeText(context, "onChildChanged", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "onChildChanged", Toast.LENGTH_SHORT).show();
                             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                 CalendarOrder order = snap.getValue(CalendarOrder.class);
                                 order.dateCalendarOrder = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(snap.getKey());
-                                calendarOrders.add(order);
+                                // TODO: Vedere per quando vengono modificati i dati da firebase
                             }
                         }
 
@@ -97,11 +98,9 @@ public class CalendarViewModel extends ViewModel {
                         }
                     });
         }
-
-        return calendarOrders;
     }
 
-    public void getOldDay(Date date, final TextView hourStart, final TextView hourEnd, final TextView job) {
+    public void getOldDay(Date date) {
         User user = getUserFromLocalDB();
         CalendarOrder calendarOrder = db.readCalendarOrderSingleDay(date);
 
@@ -112,17 +111,17 @@ public class CalendarViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
+                        if(order != null) {
+                            Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            sdf.setTimeZone(TimeZone.getDefault());
+                            order.dateCalendarOrder = sdf.format(date);
 
-                        Date date = new Date(Long.parseLong(dataSnapshot.getKey())*1000L);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        sdf.setTimeZone(TimeZone.getDefault());
-                        order.dateCalendarOrder = sdf.format(date);
+                            db.insertSingleCalendarOrderData(order);
 
-                        db.insertSingleCalendarOrderData(order);
-
-                        hourStart.setText(order.hourFrom);
-                        hourEnd.setText(order.hourTo);
-                        job.setText(order.job);
+                            calendarFragment.setData(order);
+                        }
+                        calendarFragment.setData(order);
                     }
 
                     @Override
@@ -132,9 +131,7 @@ public class CalendarViewModel extends ViewModel {
                 });
             }
         } else {
-            hourStart.setText(calendarOrder.hourFrom);
-            hourEnd.setText(calendarOrder.hourTo);
-            job.setText(calendarOrder.job);
+            calendarFragment.setData(calendarOrder);
         }
     }
 }

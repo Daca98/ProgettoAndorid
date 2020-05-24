@@ -56,4 +56,5 @@
     <string name="biometric_subtitle">Log in using your biometric credential</string>
     <string name="biometric_title">Biometric login</string>
     <string name="authentication_succes">Authentication succes</string>
+    <string name="no_information">No information available</string>
 </resources>
