@@ -1,5 +1,7 @@
 package com.example.vcv.ui.calendar;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +42,7 @@ public class CalendarFragment extends Fragment {
     TextView hourEnd;
     TextView job;
     private Date today = new Date();
-    private CalendarOrder currentOrder = null;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public CalendarOrder currentOrder = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
@@ -111,7 +108,7 @@ public class CalendarFragment extends Fragment {
         //Listener to open modify calendar
         modify.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment(currentOrder);
+                ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment(CalendarFragment.this);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.calendarFragment, modifyCalendarFragment, "modifyCalendarFragment");
@@ -199,12 +196,14 @@ public class CalendarFragment extends Fragment {
 
     public void checkOnLocalData(CalendarOrder order) {
         int index = -1;
+        int i = 0;
 
         for (CalendarOrder localeOrder : calendarOrders) {
             if (localeOrder.dateCalendarOrder.equals(order.dateCalendarOrder)) {
-                index = calendarOrders.indexOf(localeOrder);
+                index = i;
                 break;
             }
+            i++;
         }
 
         if (index > -1) {
@@ -219,6 +218,12 @@ public class CalendarFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (currentOrder.dateCalendarOrder.equals(order.dateCalendarOrder)) {
+                hourStart.setText(order.hourFrom);
+                hourEnd.setText(order.hourTo);
+                job.setText(order.job);
             }
         }
     }

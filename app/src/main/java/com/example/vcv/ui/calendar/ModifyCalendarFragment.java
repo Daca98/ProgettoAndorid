@@ -19,16 +19,20 @@ import androidx.lifecycle.ViewModelProviders;
 public class ModifyCalendarFragment extends Fragment {
     private CalendarViewModel calendarViewModel;
     private CalendarOrder currentOrder;
+    private CalendarFragment calendarFragment;
     private TextView hourStart, hourEnd, job;
-    private EditText etJob, etStartHour, etEndHour, etTotalHour, etExtraHour, etEquipment, etNote;
+    private EditText etJob, etStartHour, etEndHour, etTotalHour, etEquipment, etNote;
+    TextView etExtraHour;
     private Button modify;
 
-    public ModifyCalendarFragment(CalendarOrder calendarOrder) {
-        this.currentOrder = calendarOrder;
+    public ModifyCalendarFragment(CalendarFragment calendarFragment) {
+        this.calendarFragment = calendarFragment;
+        currentOrder = calendarFragment.currentOrder;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
+        CalendarViewModel.currentCalendarOrder = currentOrder;
         calendarViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_modifycalendar, container, false);
 
@@ -50,11 +54,12 @@ public class ModifyCalendarFragment extends Fragment {
                             etEquipment.getText().toString(),
                             etNote.getText().toString()
                     );
-                    if (currentOrder.change(newOrder)) {
+                    if (currentOrder.equals(newOrder)) {
                         calendarViewModel.saveChanges(newOrder);
                         hourStart.setText(newOrder.hourFrom);
                         hourEnd.setText(newOrder.hourTo);
                         Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
+                        calendarFragment.checkOnLocalData(newOrder);
                     } else {
                         Toast.makeText(getContext(), getString(R.string.please_change_fields), Toast.LENGTH_SHORT).show();
                     }
@@ -77,9 +82,10 @@ public class ModifyCalendarFragment extends Fragment {
         etStartHour = root.findViewById(R.id.et_startHour);
         etEndHour = root.findViewById(R.id.et_endHour);
         etTotalHour = root.findViewById(R.id.et_totalHour);
-        etExtraHour = root.findViewById(R.id.et_extraordinaryHour);
         etEquipment = root.findViewById(R.id.et_equipment);
         etNote = root.findViewById(R.id.et_note);
+
+        etExtraHour = root.findViewById(R.id.et_extraordinaryHour);
 
         modify = root.findViewById(R.id.button_modify);
     }
@@ -93,12 +99,15 @@ public class ModifyCalendarFragment extends Fragment {
         etStartHour.setText(currentOrder.hourFrom);
         etEndHour.setText(currentOrder.hourTo);
         etTotalHour.setText(currentOrder.defaultHourToWork);
-        etExtraHour.setText("");
         etEquipment.setText(currentOrder.equipment);
         etNote.setText(currentOrder.note);
+
+        etExtraHour.setText("");
     }
 
     public void getExtraordinaryHours(String hourStart, String hourEnd, String hourDft) {
         String hourExtra;
     }
+
+
 }

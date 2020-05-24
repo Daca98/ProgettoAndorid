@@ -34,6 +34,7 @@ public class CalendarViewModel extends ViewModel {
     public static Context context;
     private static QueryDB db;
     public static CalendarFragment calendarFragment;
+    public static CalendarOrder currentCalendarOrder;
 
     public CalendarViewModel() {
         mCalendarOrders = new MutableLiveData<>();

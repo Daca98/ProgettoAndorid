@@ -1,5 +1,7 @@
 package com.example.vcv.utility;
 
+import com.example.vcv.ui.calendar.CalendarViewModel;
+
 public class CalendarOrder {
 
     public String dateCalendarOrder;
@@ -33,17 +35,6 @@ public class CalendarOrder {
         }
     }
 
-    public boolean change(CalendarOrder newCalendarOrder) {
-        return !this.dateCalendarOrder.equals(newCalendarOrder.dateCalendarOrder) ||
-                !this.hourFrom.equals(newCalendarOrder.hourFrom) ||
-                !this.hourTo.equals(newCalendarOrder.hourTo) ||
-                !this.defaultHourToWork.equals(newCalendarOrder.defaultHourToWork) ||
-                !this.job.equals(newCalendarOrder.job) ||
-                !this.confirmed == newCalendarOrder.confirmed ||
-                !this.equipment.equals(newCalendarOrder.equipment) ||
-                !this.note.equals(newCalendarOrder.note);
-    }
-
     private static String checkHourFormat(String hour) {
         String newHour = "";
 
@@ -52,21 +43,37 @@ public class CalendarOrder {
             if (strs[0].matches("^[0-9]*$") && strs[1].matches("^[0-9]*$")) {
                 String firstPart, secondPart;
 
-                if (Integer.parseInt(strs[0]) < 10) {
-                    firstPart = "0" + Integer.parseInt(strs[0]);
-                } else {
-                    firstPart = strs[0];
-                }
-                if (Integer.parseInt(strs[1]) < 10) {
-                    secondPart = "0" + Integer.parseInt(strs[1]);
-                } else {
-                    secondPart = strs[1];
-                }
+                if (Integer.parseInt(strs[0]) < 25 && Integer.parseInt(strs[1]) < 60) {
+                    if (Integer.parseInt(strs[0]) < 10) {
+                        firstPart = "0" + Integer.parseInt(strs[0]);
+                    } else {
+                        firstPart = strs[0];
+                    }
+                    if (Integer.parseInt(strs[1]) < 10) {
+                        secondPart = "0" + Integer.parseInt(strs[1]);
+                    } else {
+                        secondPart = strs[1];
+                    }
 
-                newHour = firstPart + ":" + secondPart;
+                    newHour = firstPart + ":" + secondPart;
+                }
             }
         }
 
         return newHour;
+    }
+
+    @Override
+    public boolean equals(Object calendarOrder) {
+        CalendarOrder newCalendarOrder = (CalendarOrder) calendarOrder;
+
+        return !this.dateCalendarOrder.equals(newCalendarOrder.dateCalendarOrder) ||
+                !this.hourFrom.equals(newCalendarOrder.hourFrom) ||
+                !this.hourTo.equals(newCalendarOrder.hourTo) ||
+                !this.defaultHourToWork.equals(newCalendarOrder.defaultHourToWork) ||
+                !this.job.equals(newCalendarOrder.job) ||
+                !this.confirmed == newCalendarOrder.confirmed ||
+                !this.equipment.equals(newCalendarOrder.equipment) ||
+                !this.note.equals(newCalendarOrder.note);
     }
 }
