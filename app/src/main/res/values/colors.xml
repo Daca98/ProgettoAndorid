@@ -15,4 +15,6 @@
     <color name="white">#FFF</color>
 
     <color name="blue_border">#9549FF</color>
+
+    <color name="disabled">#999</color>
 </resources>

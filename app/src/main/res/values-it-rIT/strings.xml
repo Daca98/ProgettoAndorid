@@ -56,4 +56,6 @@
     <string name="biometric_subtitle">Accedi con la tua impronta biometrica</string>
     <string name="authentication_succes">Autenticazione riuscita</string>
     <string name="no_information">Nessuna informazione disponibile</string>
+    <string name="day_confirmed">Hai confermato il tuo ordine di servizio</string>
+    <string name="detail">Dettaglio</string>
 </resources>

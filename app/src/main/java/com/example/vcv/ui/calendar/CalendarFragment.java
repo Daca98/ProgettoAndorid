@@ -6,21 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import android.widget.Toast;
 
 import com.example.vcv.R;
 import com.example.vcv.utility.CalendarOrder;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +19,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 
 public class CalendarFragment extends Fragment {
@@ -37,6 +34,7 @@ public class CalendarFragment extends Fragment {
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private ArrayList<CalendarOrder> calendarOrders = new ArrayList<>();
     Button confirm;
+    Button modify;
     TextView hourStart;
     TextView hourEnd;
     TextView job;
@@ -52,7 +50,7 @@ public class CalendarFragment extends Fragment {
         hourStart = root.findViewById(R.id.HourStart);
         hourEnd = root.findViewById(R.id.HourEnd);
         job = root.findViewById(R.id.job);
-        final Button modify = (Button) root.findViewById(R.id.button_modify);
+        modify = (Button) root.findViewById(R.id.button_modify);
         compactCalendar = (CompactCalendarView) root.findViewById(R.id.compactcalendar_view);
         confirm = (Button) root.findViewById(R.id.button_confirm);
 
@@ -62,6 +60,7 @@ public class CalendarFragment extends Fragment {
         String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
         textView.setText(monthCapitalize);
         setData(null);
+        setSaveAndChangeStatus(false);
 
         calendarViewModel.downloadDataFromFirebase();
 
@@ -88,14 +87,8 @@ public class CalendarFragment extends Fragment {
         //Listener to confirm have seen order
         confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // save data on firebase and local db
+                // save data on firebase
                 calendarViewModel.setConfirmed(currentOrder);
-                // Change confirm value in local arraylist of orders
-                for (CalendarOrder calendarOrder : calendarOrders) {
-                    if (calendarOrder.dateCalendarOrder.equals(currentOrder.dateCalendarOrder)) {
-                        calendarOrder.confirmed = true;
-                    }
-                }
                 // Remove event from calendar
                 try {
                     Date dateOrder = new SimpleDateFormat("yyyy-MM-dd").parse(currentOrder.dateCalendarOrder);
@@ -104,6 +97,8 @@ public class CalendarFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                Toast.makeText(getContext(), getString(R.string.day_confirmed), Toast.LENGTH_SHORT).show();
+                setSaveAndChangeStatus(false);
             }
         });
 
@@ -126,7 +121,7 @@ public class CalendarFragment extends Fragment {
         calendarOrders.add(order);
         Event ev;
         //add event for new days
-        if(!order.confirmed){
+        if (!order.confirmed) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = dateFormat.parse(order.dateCalendarOrder);
@@ -137,30 +132,30 @@ public class CalendarFragment extends Fragment {
             }
         }
 
-        if(order.dateCalendarOrder.equals(convertData(new Date()))){
+        if (order.dateCalendarOrder.equals(convertData(new Date()))) {
             setData(order);
         }
     }
 
-    public void setData(CalendarOrder order){
-        if(order != null){
+    public void setData(CalendarOrder order) {
+        if (order != null) {
             currentOrder = order;
-            if(!calendarOrders.contains(order)){
+            if (!calendarOrders.contains(order)) {
                 calendarOrders.add(order);
             }
             hourStart.setText(order.hourFrom);
             hourEnd.setText(order.hourTo);
             job.setText(order.job);
-            if(!order.confirmed){
-                confirm.setFocusable(true);
+            if (!order.confirmed) {
+                setSaveAndChangeStatus(true);
+            } else {
+                setSaveAndChangeStatus(false);
             }
-            else{
-                confirm.setFocusable(false);
-            }
-        } else{
+        } else {
             hourStart.setText(" - ");
             hourEnd.setText(" - ");
             job.setText(R.string.no_information);
+            setSaveAndChangeStatus(false);
         }
     }
 
@@ -169,14 +164,14 @@ public class CalendarFragment extends Fragment {
         return dateFormat.format(date);
     }
 
-    private void getInfoCurrentDay(Date dateClicked){
-        confirm.setFocusable(true);
+    private void getInfoCurrentDay(Date dateClicked) {
+        confirm.setEnabled(true);
         Boolean useRemoteDate = true;
 
         for (CalendarOrder order :
                 calendarOrders) {
             try {
-                if(order.dateCalendarOrder.equals(convertData(dateClicked))){
+                if (order.dateCalendarOrder.equals(convertData(dateClicked))) {
                     useRemoteDate = false;
                     setData(order);
                     break;
@@ -185,7 +180,7 @@ public class CalendarFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        if(useRemoteDate) {
+        if (useRemoteDate) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateClicked);
             calendar.set(Calendar.HOUR_OF_DAY, 2);
@@ -196,24 +191,39 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    public void checkOnLocalData(CalendarOrder order){
-        for (CalendarOrder localeOrder:
-             calendarOrders) {
+    public void checkOnLocalData(CalendarOrder order) {
+        int index = -1;
+
+        for (CalendarOrder localeOrder : calendarOrders) {
             if (localeOrder.dateCalendarOrder.equals(order.dateCalendarOrder)) {
-                int index = calendarOrders.indexOf(localeOrder);
-                calendarOrders.remove(index);
-                calendarOrders.add(index, order);
-                if(!order.confirmed){
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date date = dateFormat.parse(order.dateCalendarOrder);
-                        Event ev = new Event(R.color.colorWhite, date.getTime());
-                        compactCalendar.addEvent(ev);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                index = calendarOrders.indexOf(localeOrder);
+                break;
+            }
+        }
+
+        if (index > -1) {
+            calendarOrders.remove(index);
+            calendarOrders.add(index, order);
+            if (!order.confirmed) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = dateFormat.parse(order.dateCalendarOrder);
+                    Event ev = new Event(R.color.colorWhite, date.getTime());
+                    compactCalendar.addEvent(ev);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         }
+    }
+
+    private void setSaveAndChangeStatus(boolean areEnabled) {
+        confirm.setEnabled(areEnabled);
+        if (areEnabled) {
+            confirm.setBackgroundResource(R.drawable.button_confirm);
+        } else {
+            confirm.setBackgroundResource(R.drawable.button_disabled);
+        }
+        modify.setText(areEnabled ? getString(R.string.modify) : getString(R.string.detail));
     }
 }

@@ -2,7 +2,6 @@ package com.example.vcv.ui.calendar;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vcv.utility.CalendarOrder;
@@ -21,9 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.Semaphore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,7 +58,7 @@ public class CalendarViewModel extends ViewModel {
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             //Toast.makeText(context, "onChildAdded", Toast.LENGTH_SHORT).show();
                             CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
-                            Date date = new Date(Long.parseLong(dataSnapshot.getKey())*1000L);
+                            Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             sdf.setTimeZone(TimeZone.getDefault());
                             order.dateCalendarOrder = sdf.format(date);
@@ -75,11 +72,12 @@ public class CalendarViewModel extends ViewModel {
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             //Toast.makeText(context, "onChildChanged", Toast.LENGTH_SHORT).show();
-                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                                CalendarOrder order = snap.getValue(CalendarOrder.class);
-                                order.dateCalendarOrder = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(snap.getKey());
-                                calendarFragment.checkOnLocalData(order);
-                            }
+                            CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
+                            Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            sdf.setTimeZone(TimeZone.getDefault());
+                            order.dateCalendarOrder = sdf.format(date);
+                            calendarFragment.checkOnLocalData(order);
                         }
 
                         @Override
@@ -111,7 +109,7 @@ public class CalendarViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
-                        if(order != null) {
+                        if (order != null) {
                             Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             sdf.setTimeZone(TimeZone.getDefault());
@@ -135,7 +133,27 @@ public class CalendarViewModel extends ViewModel {
         }
     }
 
-    public void setConfirmed(CalendarOrder order){
-        //Ciao Dalle
+    public void setConfirmed(CalendarOrder order) {
+        User user = getUserFromLocalDB();
+
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(order.dateCalendarOrder);
+
+            if (date != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.set(Calendar.HOUR_OF_DAY, 2);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                Timestamp ts = new Timestamp(calendar.getTime().getTime());
+
+                String timeStampDay = String.valueOf(ts.getTime() / 1000);
+
+                FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).child(timeStampDay).child("confirmed").setValue(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
