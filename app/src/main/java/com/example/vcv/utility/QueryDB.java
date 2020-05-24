@@ -71,6 +71,7 @@ public class QueryDB {
 
     public void cleanLogout() {
         cleanUser();
+        cleanOrders();
     }
 
     private void cleanUser() {
@@ -80,6 +81,12 @@ public class QueryDB {
     }
 
     // Query for calendar order
+    private void cleanOrders() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.execSQL("DELETE FROM " + ContractLocalDB.TABLE_NAME_ORDER);
+    }
+
     public long insertSingleCalendarOrderData(CalendarOrder calendarOrder) {
         long newRowCount = 0;
 

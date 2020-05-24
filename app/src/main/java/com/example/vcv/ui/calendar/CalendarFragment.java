@@ -63,7 +63,7 @@ public class CalendarFragment extends Fragment {
         String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
         textView.setText(monthCapitalize);
         setData(null);
-        setSaveAndChangeStatus(false);
+        setSaveAndChangeStatus(false, false);
 
         calendarViewModel.downloadDataFromFirebase();
 
@@ -101,7 +101,7 @@ public class CalendarFragment extends Fragment {
                     e.printStackTrace();
                 }
                 Toast.makeText(getContext(), getString(R.string.day_confirmed), Toast.LENGTH_SHORT).show();
-                setSaveAndChangeStatus(false);
+                setSaveAndChangeStatus(false, false);
             }
         });
 
@@ -150,15 +150,16 @@ public class CalendarFragment extends Fragment {
             hourEnd.setText(order.hourTo);
             job.setText(order.job);
             if (!order.confirmed) {
-                setSaveAndChangeStatus(true);
+                setSaveAndChangeStatus(true, false);
             } else {
-                setSaveAndChangeStatus(false);
+                setSaveAndChangeStatus(false, false);
             }
         } else {
             hourStart.setText(" - ");
             hourEnd.setText(" - ");
             job.setText(R.string.no_information);
-            setSaveAndChangeStatus(false);
+            currentOrder = null;
+            setSaveAndChangeStatus(false, true);
         }
     }
 
@@ -228,13 +229,22 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private void setSaveAndChangeStatus(boolean areEnabled) {
+    // areEnabled = define if confirm button has to be enabled or disabled and if modify button has to show text "modify" or "detail"
+    // forceDisableModify = define if also modify button has to be disabled
+    private void setSaveAndChangeStatus(boolean areEnabled, boolean forceDisableModify) {
         confirm.setEnabled(areEnabled);
         if (areEnabled) {
             confirm.setBackgroundResource(R.drawable.button_confirm);
         } else {
             confirm.setBackgroundResource(R.drawable.button_disabled);
         }
-        modify.setText(areEnabled ? getString(R.string.modify) : getString(R.string.detail));
+        if (!forceDisableModify) {
+            modify.setEnabled(true);
+            modify.setBackgroundResource(R.drawable.button_confirm);
+            modify.setText(areEnabled ? getString(R.string.modify) : getString(R.string.detail));
+        } else {
+            modify.setEnabled(false);
+            modify.setBackgroundResource(R.drawable.button_disabled);
+        }
     }
 }
