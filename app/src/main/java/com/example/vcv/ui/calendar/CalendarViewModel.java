@@ -78,7 +78,7 @@ public class CalendarViewModel extends ViewModel {
                             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                 CalendarOrder order = snap.getValue(CalendarOrder.class);
                                 order.dateCalendarOrder = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(snap.getKey());
-                                // TODO: Vedere per quando vengono modificati i dati da firebase
+                                calendarFragment.checkOnLocalData(order);
                             }
                         }
 
@@ -100,7 +100,7 @@ public class CalendarViewModel extends ViewModel {
         }
     }
 
-    public void getOldDay(Date date) {
+    public void getSingleDay(Date date) {
         User user = getUserFromLocalDB();
         CalendarOrder calendarOrder = db.readCalendarOrderSingleDay(date);
 
@@ -133,5 +133,9 @@ public class CalendarViewModel extends ViewModel {
         } else {
             calendarFragment.setData(calendarOrder);
         }
+    }
+
+    public void setConfirmed(CalendarOrder order){
+        //Ciao Dalle
     }
 }

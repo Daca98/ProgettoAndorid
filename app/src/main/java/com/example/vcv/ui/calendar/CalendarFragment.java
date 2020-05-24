@@ -41,6 +41,7 @@ public class CalendarFragment extends Fragment {
     TextView hourEnd;
     TextView job;
     private Date today = new Date();
+    private CalendarOrder currentOrder = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
@@ -69,30 +70,7 @@ public class CalendarFragment extends Fragment {
             //when click one day
             @Override
             public void onDayClick(Date dateClicked) {
-                confirm.setFocusable(true);
-                Boolean useRemoteDate = true;
-
-                for (CalendarOrder order :
-                     calendarOrders) {
-                    try {
-                        if(order.dateCalendarOrder.equals(convertData(dateClicked))){
-                            useRemoteDate = false;
-                            setData(order);
-                            break;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if(useRemoteDate) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(dateClicked);
-                    calendar.set(Calendar.HOUR_OF_DAY, 2);
-                    calendar.set(Calendar.MINUTE, 0);
-                    calendar.set(Calendar.SECOND, 0);
-                    calendar.set(Calendar.MILLISECOND, 0);
-                    calendarViewModel.getOldDay(calendar.getTime());
-                }
+                getInfoCurrentDay(dateClicked);
             }
 
             //when scroll on months
@@ -102,6 +80,30 @@ public class CalendarFragment extends Fragment {
                 String month = dateFormatMonth.format(firstDayOfNewMonth);
                 String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
                 textView.setText(monthCapitalize);
+
+                getInfoCurrentDay(firstDayOfNewMonth);
+            }
+        });
+
+        //Listener to confirm have seen order
+        confirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // save data on firebase and local db
+                calendarViewModel.setConfirmed(currentOrder);
+                // Change confirm value in local arraylist of orders
+                for (CalendarOrder calendarOrder : calendarOrders) {
+                    if (calendarOrder.dateCalendarOrder.equals(currentOrder.dateCalendarOrder)) {
+                        calendarOrder.confirmed = true;
+                    }
+                }
+                // Remove event from calendar
+                try {
+                    Date dateOrder = new SimpleDateFormat("yyyy-MM-dd").parse(currentOrder.dateCalendarOrder);
+                    Event ev = new Event(R.color.colorWhite, dateOrder.getTime());
+                    compactCalendar.removeEvent(ev);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -142,6 +144,7 @@ public class CalendarFragment extends Fragment {
 
     public void setData(CalendarOrder order){
         if(order != null){
+            currentOrder = order;
             if(!calendarOrders.contains(order)){
                 calendarOrders.add(order);
             }
@@ -164,5 +167,53 @@ public class CalendarFragment extends Fragment {
     private String convertData(Date date) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
+    }
+
+    private void getInfoCurrentDay(Date dateClicked){
+        confirm.setFocusable(true);
+        Boolean useRemoteDate = true;
+
+        for (CalendarOrder order :
+                calendarOrders) {
+            try {
+                if(order.dateCalendarOrder.equals(convertData(dateClicked))){
+                    useRemoteDate = false;
+                    setData(order);
+                    break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(useRemoteDate) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateClicked);
+            calendar.set(Calendar.HOUR_OF_DAY, 2);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            calendarViewModel.getSingleDay(calendar.getTime());
+        }
+    }
+
+    public void checkOnLocalData(CalendarOrder order){
+        for (CalendarOrder localeOrder:
+             calendarOrders) {
+            if (localeOrder.dateCalendarOrder.equals(order.dateCalendarOrder)) {
+                int index = calendarOrders.indexOf(localeOrder);
+                calendarOrders.remove(index);
+                calendarOrders.add(index, order);
+                if(!order.confirmed){
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = dateFormat.parse(order.dateCalendarOrder);
+                        Event ev = new Event(R.color.colorWhite, date.getTime());
+                        compactCalendar.addEvent(ev);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }
