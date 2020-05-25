@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.example.vcv.R;
 import com.example.vcv.utility.CalendarOrder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,7 +25,7 @@ public class ModifyCalendarFragment extends Fragment {
     private CalendarFragment calendarFragment;
     private TextView hourStart, hourEnd, job;
     private EditText etJob, etStartHour, etEndHour, etTotalHour, etEquipment, etNote;
-    TextView etExtraHour;
+    TextView twExtraHour;
     private Button modify;
 
     public ModifyCalendarFragment(CalendarFragment calendarFragment) {
@@ -48,7 +51,7 @@ public class ModifyCalendarFragment extends Fragment {
                             currentOrder.dateCalendarOrder,
                             etStartHour.getText().toString(),
                             etEndHour.getText().toString(),
-                            currentOrder.defaultHourToWork,
+                            etTotalHour.getText().toString(),
                             etJob.getText().toString(),
                             currentOrder.confirmed,
                             etEquipment.getText().toString(),
@@ -60,6 +63,8 @@ public class ModifyCalendarFragment extends Fragment {
                         hourEnd.setText(newOrder.hourTo);
                         Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
                         calendarFragment.checkOnLocalData(newOrder);
+                        twExtraHour.setText(getExtraordinaryHours(newOrder.hourFrom, newOrder.hourTo, newOrder.defaultHourToWork));
+                        currentOrder = newOrder;
                     } else {
                         Toast.makeText(getContext(), getString(R.string.please_change_fields), Toast.LENGTH_SHORT).show();
                     }
@@ -85,7 +90,7 @@ public class ModifyCalendarFragment extends Fragment {
         etEquipment = root.findViewById(R.id.et_equipment);
         etNote = root.findViewById(R.id.et_note);
 
-        etExtraHour = root.findViewById(R.id.et_extraordinaryHour);
+        twExtraHour = root.findViewById(R.id.et_extraordinaryHour);
 
         modify = root.findViewById(R.id.button_modify);
     }
@@ -102,11 +107,30 @@ public class ModifyCalendarFragment extends Fragment {
         etEquipment.setText(currentOrder.equipment);
         etNote.setText(currentOrder.note);
 
-        etExtraHour.setText("");
+        twExtraHour.setText(getExtraordinaryHours(currentOrder.hourFrom, currentOrder.hourTo, currentOrder.defaultHourToWork));
     }
 
-    public void getExtraordinaryHours(String hourStart, String hourEnd, String hourDft) {
-        String hourExtra;
+    public String getExtraordinaryHours(String startHour, String endHour, String dftHour) {
+        String hourExtra = "";
+
+        Calendar cal = Calendar.getInstance();
+        // Create instance with final hour work
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endHour.split(":")[0]));
+        cal.set(Calendar.MINUTE, Integer.parseInt(endHour.split(":")[1]));
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        // Subtract hours worked
+        cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(startHour.split(":")[0]) * -1);
+        cal.add(Calendar.MINUTE, Integer.parseInt(startHour.split(":")[1]) * -1);
+
+        // Subtract default hours to work, getting extraHours
+        cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(dftHour.split(":")[0]) * -1);
+        cal.add(Calendar.MINUTE, Integer.parseInt(dftHour.split(":")[1]) * -1);
+
+        hourExtra = new SimpleDateFormat("HH:mm").format(cal.getTime());
+
+        return hourExtra;
     }
 
 
