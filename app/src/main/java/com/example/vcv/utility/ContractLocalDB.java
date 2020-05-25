@@ -29,7 +29,7 @@ public class ContractLocalDB extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_USER;
 
     // Table order
-    public static final String COLUMN_NAME_ORDER_ID = "ID";
+    //public static final String COLUMN_NAME_ORDER_ID = "ID";
     public static final String TABLE_NAME_ORDER = "CalendarOrder";
     public static final String COLUMN_NAME_ORDER_DATE = "DateCalendarOrder";
     public static final String COLUMN_NAME_ORDER_HOUR_FROM = "HourFrom";

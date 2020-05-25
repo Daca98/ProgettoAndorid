@@ -37,11 +37,7 @@ public class CalendarViewModel extends ViewModel {
     public static CalendarOrder currentCalendarOrder;
 
     public CalendarViewModel() {
-        mCalendarOrders = new MutableLiveData<>();
-    }
 
-    public LiveData<ArrayList<CalendarOrder>> getCalendar() {
-        return mCalendarOrders;
     }
 
     private User getUserFromLocalDB() {
