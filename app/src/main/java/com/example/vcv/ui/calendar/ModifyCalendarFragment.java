@@ -12,9 +12,6 @@ import android.widget.Toast;
 import com.example.vcv.R;
 import com.example.vcv.utility.CalendarOrder;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -111,42 +108,40 @@ public class ModifyCalendarFragment extends Fragment {
     }
 
     public String getExtraordinaryHours(String startHour, String endHour, String dftHour) {
-        String hourExtra = "";
+        long extraSeconds = ((getSeconds(endHour) - getSeconds(startHour)) - getSeconds(dftHour));
 
-        Calendar calToday = Calendar.getInstance(); // Used for checking less hour worked
-        calToday.set(Calendar.HOUR_OF_DAY, 0);
-        calToday.set(Calendar.MINUTE, 0);
-        calToday.set(Calendar.SECOND, 0);
-        calToday.set(Calendar.MILLISECOND, 0);
-
-        Calendar cal = Calendar.getInstance();
-        // Create instance with final hour work
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endHour.split(":")[0]));
-        cal.set(Calendar.MINUTE, Integer.parseInt(endHour.split(":")[1]));
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        // Subtract start hour work = hours worked
-        cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(startHour.split(":")[0]) * -1);
-        cal.add(Calendar.MINUTE, Integer.parseInt(startHour.split(":")[1]) * -1);
-
-        // Subtract default hours to work = extraHours
-        cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(dftHour.split(":")[0]) * -1);
-        cal.add(Calendar.MINUTE, Integer.parseInt(dftHour.split(":")[1]) * -1);
-
-        if (calToday.getTime().compareTo(cal.getTime()) > 0) {
-            // Revert hours
-            int hour = Integer.parseInt(new SimpleDateFormat("HH").format(cal.getTime()));
-            int minutes = Integer.parseInt(new SimpleDateFormat("mm").format(cal.getTime()));
-            calToday.add(Calendar.HOUR_OF_DAY, hour * -1);
-            calToday.add(Calendar.MINUTE, minutes * -1);
-            hourExtra = "-" + new SimpleDateFormat("HH:mm").format(calToday.getTime());
-        } else {
-            hourExtra = new SimpleDateFormat("HH:mm").format(cal.getTime());
-        }
-
-        return hourExtra;
+        return getHourFromSeconds(extraSeconds);
     }
 
+    private long getSeconds(String hour) {
+        long hourSeconds = Integer.parseInt(hour.split(":")[0]) * 3600;
+        long minutesSeconds = Integer.parseInt(hour.split(":")[1]) * 60;
 
+        return hourSeconds + minutesSeconds;
+    }
+
+    private String getHourFromSeconds(long seconds) {
+        String res = "";
+
+        if (seconds > 0) {
+            if ((seconds / 3600.0) < 1.0) {
+                String minutes = Double.toString(seconds / 60.0);
+
+                res += "00:" + String.format("%02d", Integer.parseInt(minutes.split("\\.")[0]));
+            } else {
+                String hourString = Double.toString(seconds / 3600.0);
+                int hourInt = Integer.parseInt(hourString.split("\\.")[0]);
+                res += String.format("%02d", hourInt);
+
+                res += ":";
+
+                String minutes = Double.toString((seconds - (3600 * hourInt)) / 60.0);
+                res += String.format("%02d", Integer.parseInt(minutes.split("\\.")[0]));
+            }
+        } else {
+            res = "00:00";
+        }
+
+        return res;
+    }
 }

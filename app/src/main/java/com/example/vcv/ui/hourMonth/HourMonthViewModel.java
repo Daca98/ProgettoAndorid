@@ -13,10 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -50,8 +48,8 @@ public class HourMonthViewModel extends ViewModel {
         User user = getUserFromLocalDB();
         final Calendar calStart = initCalStart();
         final Calendar calEnd = initCalEnd();
-        final Calendar totHoursShouldWork = initLocalCalendars(null, null);
-        final Calendar totHoursWorked = initLocalCalendars(null, null);
+        final long[] totHoursShouldWork = {0L};
+        final long[] totHoursWorked = {0L};
         final int[] totDays = {0};
 
         if (user != null && user.badgeNumber != null) {
@@ -63,27 +61,11 @@ public class HourMonthViewModel extends ViewModel {
                                 Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
                                 if (calStart.getTime().compareTo(date) < 0 && date.compareTo(calEnd.getTime()) < 0) {
                                     CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
-
-                                    totHoursShouldWork.add(Calendar.HOUR_OF_DAY, Integer.parseInt(order.defaultHourToWork.split(":")[0]));
-                                    totHoursShouldWork.add(Calendar.MINUTE, Integer.parseInt(order.defaultHourToWork.split(":")[1]));
-
-                                    Calendar calSupp = initLocalCalendars(Integer.valueOf(order.hourTo.split(":")[0]), Integer.valueOf(order.hourTo.split(":")[1]));
-                                    calSupp.add(Calendar.HOUR_OF_DAY, Integer.parseInt(order.hourFrom.split(":")[0]) * -1);
-                                    calSupp.add(Calendar.MINUTE, Integer.parseInt(order.hourFrom.split(":")[1]) * -1);
-                                    String hours = new SimpleDateFormat("HH").format(calSupp.getTime());
-                                    String minutes = new SimpleDateFormat("mm").format(calSupp.getTime());
-                                    totHoursWorked.add(Calendar.HOUR_OF_DAY, Integer.parseInt(hours));
-                                    totHoursWorked.add(Calendar.MINUTE, Integer.parseInt(minutes));
-
+                                    totHoursShouldWork[0] += getSeconds(order.defaultHourToWork);
+                                    totHoursWorked[0] += (getSeconds(order.hourTo) - getSeconds(order.hourFrom));
                                     totDays[0]++;
 
-                                    try {
-                                        long hoursShouldWork = getTotHourFromToday(totHoursShouldWork);
-                                        long hoursWorked = getTotHourFromToday(totHoursWorked);
-                                        hourMonthFragment.writeHoursInGraphics(getTotHourFromTodayHumanFormat(hoursShouldWork), getTotHourFromTodayHumanFormat(hoursWorked), getTotHourFromTodayHumanFormat(hoursWorked -  hoursShouldWork), totDays[0]);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
+                                    hourMonthFragment.writeHoursInGraphics(getHourFromSeconds(totHoursShouldWork[0]), getHourFromSeconds(totHoursWorked[0]), getHourFromSeconds(totHoursWorked[0] - totHoursShouldWork[0]), totDays[0]);
                                 }
                             }
                         }
@@ -133,46 +115,33 @@ public class HourMonthViewModel extends ViewModel {
         return calEnd;
     }
 
-    private Calendar initLocalCalendars(Integer hourOfDay, Integer minute) {
-        Calendar cal = Calendar.getInstance();
-        // Create instance with final hour work
-        cal.set(Calendar.HOUR_OF_DAY, (hourOfDay != null ? hourOfDay : 0));
-        cal.set(Calendar.MINUTE, (minute != null ? minute : 0));
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+    private long getSeconds(String hour) {
+        long hourSeconds = Integer.parseInt(hour.split(":")[0]) * 3600;
+        long minutesSeconds = Integer.parseInt(hour.split(":")[1]) * 60;
 
-        return cal;
+        return hourSeconds + minutesSeconds;
     }
 
-    private long getTotHourFromToday(Calendar calendar) throws ParseException {
-        Date firstDate = calendar.getTime();
-        Date secondDate = initLocalCalendars(null, null).getTime();
-
-        long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
-        long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-        return diff;
-    }
-
-    private String getTotHourFromTodayHumanFormat(long time) {
+    private String getHourFromSeconds(long seconds) {
         String res = "";
 
-        long hours = time / 60;
-        double minutesDouble = 60 * ((time / 60.0) - (time / 60));
-        int minutes = Integer.parseInt(new DecimalFormat("#").format(minutesDouble));
+        if (seconds > 0) {
+            if ((seconds / 3600.0) < 1.0) {
+                String minutes = Double.toString(seconds / 60.0);
 
-        if (hours < 10) {
-            res += "0" + hours;
+                res += "00:" + String.format("%02d", Integer.parseInt(minutes.split("\\.")[0]));
+            } else {
+                String hourString = Double.toString(seconds / 3600.0);
+                int hourInt = Integer.parseInt(hourString.split("\\.")[0]);
+                res += String.format("%02d", hourInt);
+
+                res += ":";
+
+                String minutes = Double.toString((seconds - (3600 * hourInt)) / 60.0);
+                res += String.format("%02d", Integer.parseInt(minutes.split("\\.")[0]));
+            }
         } else {
-            res += hours;
-        }
-
-        res += ":";
-
-        if (minutes < 10) {
-            res += "0" + minutes;
-        } else {
-            res += minutes;
+            res = "00:00";
         }
 
         return res;
