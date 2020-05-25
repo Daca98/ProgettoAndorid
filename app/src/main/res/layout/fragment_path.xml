@@ -50,8 +50,7 @@
 
                 <LinearLayout
                     android:paddingLeft="25dp"
-                    android:paddingTop="25dp"
-                    android:paddingRight="25dp"
+                    android:paddingTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -61,25 +60,9 @@
                         android:textSize="16sp"
                         android:textStyle="bold"/>
                     <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/s_paths"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="25dp"
-                    android:paddingTop="25dp"
-                    android:paddingRight="25dp">
-
-                    <Button
-                        android:id="@+id/button_modify"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:text="@string/confirm"
-                        style="@style/ButtonStyle"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

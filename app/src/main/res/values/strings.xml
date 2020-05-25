@@ -57,4 +57,9 @@
     <string name="biometric_title">Biometric login</string>
     <string name="authentication_succes">Authentication succes</string>
     <string name="new_notification">You have new orders, check out your calendar</string>
+    <string name="no_information">No information available</string>
+    <string name="day_confirmed">You have confirmed your daily order</string>
+    <string name="detail">Detail</string>
+    <string name="please_change_fields">Please change fields, or check its format, to save</string>
+    <string name="save_data_success">Data saved with success</string>
 </resources>

@@ -224,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 if (completeUser != null) {
                                                     QueryDB db = new QueryDB(LoginActivity.this);
                                                     db.insertUserData(completeUser);
+                                                    goToMainActivity();
                                                 }
                                             }
 
@@ -232,8 +233,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 Log.e("", databaseError.getMessage());
                                             }
                                         });
-
-                                        goToMainActivity();
                                     } else {
                                         // If sign goes wrong, display a message to the user
                                         Log.w("", "signInWithEmail:failure", task.getException());

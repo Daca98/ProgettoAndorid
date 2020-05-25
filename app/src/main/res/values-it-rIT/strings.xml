@@ -56,4 +56,9 @@
     <string name="biometric_subtitle">Accedi con la tua impronta biometrica</string>
     <string name="authentication_succes">Autenticazione riuscita</string>
     <string name="new_notification">Hai dei nuovi ordini di servizio, controlla il calendario</string>
+    <string name="no_information">Nessuna informazione disponibile</string>
+    <string name="day_confirmed">Hai confermato il tuo ordine di servizio</string>
+    <string name="detail">Dettaglio</string>
+    <string name="please_change_fields">Modificare almeno un campo, o controllare il formato dei dati, per salvare</string>
+    <string name="save_data_success">Dati salvati con successo</string>
 </resources>

@@ -28,7 +28,7 @@
             <LinearLayout
                 android:id="@+id/container_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/textService"
@@ -101,7 +101,6 @@
                         android:id="@+id/job"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
                         android:paddingRight="25dp"
                         android:paddingTop="15dp"
                         android:textSize="16sp"/>
@@ -118,8 +117,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="8"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/login_border"
                 android:padding="1dp"
@@ -201,15 +199,6 @@
                             android:drawableStart="@drawable/time"
                             android:drawableLeft="@drawable/time" />
                         <EditText
-                            android:id="@+id/et_extraordinaryHour"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/extraordinary"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/time"
-                            android:drawableLeft="@drawable/time" />
-                        <EditText
                             android:id="@+id/et_equipment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -227,6 +216,14 @@
                             android:drawablePadding="10dp"
                             android:drawableStart="@drawable/ic_note_add_black_24dp"
                             android:drawableLeft="@drawable/ic_note_add_black_24dp" />
+                        <TextView
+                            android:id="@+id/et_extraordinaryHour"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:drawablePadding="18dp"
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
