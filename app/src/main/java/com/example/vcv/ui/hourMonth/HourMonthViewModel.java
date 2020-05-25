@@ -78,15 +78,14 @@ public class HourMonthViewModel extends ViewModel {
                                     totDays[0]++;
 
                                     try {
-                                        hourMonthFragment.writeHoursInGraphics(getTotHourFromToday(totHoursShouldWork), getTotHourFromToday(totHoursWorked), "", totDays[0]);
+                                        long hoursShouldWork = getTotHourFromToday(totHoursShouldWork);
+                                        long hoursWorked = getTotHourFromToday(totHoursWorked);
+                                        hourMonthFragment.writeHoursInGraphics(getTotHourFromTodayHumanFormat(hoursShouldWork), getTotHourFromTodayHumanFormat(hoursWorked), getTotHourFromTodayHumanFormat(hoursWorked -  hoursShouldWork), totDays[0]);
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             }
-                            System.out.println(totHoursShouldWork.getTime());
-                            System.out.println(totHoursWorked.getTime());
-                            System.out.println(totDays[0]);
                         }
 
                         @Override
@@ -145,17 +144,21 @@ public class HourMonthViewModel extends ViewModel {
         return cal;
     }
 
-    private String getTotHourFromToday(Calendar calendar) throws ParseException {
-        String res = "";
-
+    private long getTotHourFromToday(Calendar calendar) throws ParseException {
         Date firstDate = calendar.getTime();
         Date secondDate = initLocalCalendars(null, null).getTime();
 
         long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
         long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        long hours = diff / 60;
-        double minutesDouble = 60 * ((diff / 60.0) - (diff / 60));
+        return diff;
+    }
+
+    private String getTotHourFromTodayHumanFormat(long time) {
+        String res = "";
+
+        long hours = time / 60;
+        double minutesDouble = 60 * ((time / 60.0) - (time / 60));
         int minutes = Integer.parseInt(new DecimalFormat("#").format(minutesDouble));
 
         if (hours < 10) {
