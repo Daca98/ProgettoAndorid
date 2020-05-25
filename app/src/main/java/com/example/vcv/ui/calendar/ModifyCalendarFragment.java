@@ -126,11 +126,11 @@ public class ModifyCalendarFragment extends Fragment {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        // Subtract hours worked
+        // Subtract start hour work = hours worked
         cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(startHour.split(":")[0]) * -1);
         cal.add(Calendar.MINUTE, Integer.parseInt(startHour.split(":")[1]) * -1);
 
-        // Subtract default hours to work, getting extraHours
+        // Subtract default hours to work = extraHours
         cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(dftHour.split(":")[0]) * -1);
         cal.add(Calendar.MINUTE, Integer.parseInt(dftHour.split(":")[1]) * -1);
 

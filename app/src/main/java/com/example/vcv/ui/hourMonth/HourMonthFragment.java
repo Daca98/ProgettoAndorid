@@ -15,16 +15,36 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.vcv.R;
 import com.example.vcv.ui.calendar.CalendarViewModel;
 
+import java.util.Date;
+
 public class HourMonthFragment extends Fragment {
 
     private HourMonthViewModel hourMonthViewModel;
+    public TextView hoursShouldWork, hoursWorked, hoursExtra;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        hourMonthViewModel =
-                ViewModelProviders.of(this).get(HourMonthViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        HourMonthViewModel.context = this.getContext();
+        HourMonthViewModel.hourMonthFragment = this;
+
+        hourMonthViewModel = ViewModelProviders.of(this).get(HourMonthViewModel.class);
         View root = inflater.inflate(R.layout.fragment_hourmonth, container, false);
 
+        initGraphics(root);
+
+        hourMonthViewModel.getMonthHoursRecap();
+
         return root;
+    }
+
+    private void initGraphics(View root) {
+        hoursShouldWork = root.findViewById(R.id.tw_tot_hours_should_work);
+        hoursWorked = root.findViewById(R.id.tw_tot_hours_worked);
+        hoursExtra = root.findViewById(R.id.tw_tot_extra_hours_worked);
+    }
+
+    public void writeHoursInGraphics(String totHoursShouldWork, String totHoursWorked, String totExtraHours, int daysCalculatedOn) {
+        hoursShouldWork.setText(totHoursShouldWork);
+        hoursWorked.setText(totHoursWorked);
+        hoursExtra.setText(totExtraHours);
     }
 }

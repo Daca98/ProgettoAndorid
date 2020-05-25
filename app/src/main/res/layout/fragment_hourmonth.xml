@@ -39,6 +39,7 @@
                 android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
+                android:id="@+id/tw_tot_hours_should_work"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -75,6 +76,7 @@
                 android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
+                android:id="@+id/tw_tot_hours_worked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -111,6 +113,7 @@
                 android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
+                android:id="@+id/tw_tot_extra_hours_worked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
