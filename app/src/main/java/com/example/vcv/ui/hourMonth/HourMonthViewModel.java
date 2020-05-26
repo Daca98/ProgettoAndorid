@@ -1,115 +1,93 @@
 package com.example.vcv.ui.hourMonth;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.example.vcv.utility.CalendarOrder;
+import com.example.vcv.utility.PersonalMap;
 import com.example.vcv.utility.QueryDB;
 import com.example.vcv.utility.User;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class HourMonthViewModel extends ViewModel {
-
-    private MutableLiveData<String> mText;
     public static Context context;
     public static HourMonthFragment hourMonthFragment;
     private static QueryDB db;
-
-    public HourMonthViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is month fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
-    }
 
     private User getUserFromLocalDB() {
         db = new QueryDB(context);
         return db.readUser();
     }
 
-    public void getMonthHoursRecap() {
+    public void getMonthHoursRecap(int month, int year) {
         User user = getUserFromLocalDB();
-        final Calendar calStart = initCalStart();
-        final Calendar calEnd = initCalEnd();
+        final Calendar calStart = initCalStart(month, year);
+        final Calendar calEnd = initCalEnd(month, year);
         final long[] totHoursShouldWork = {0L};
         final long[] totHoursWorked = {0L};
         final int[] totDays = {0};
 
         if (user != null && user.badgeNumber != null) {
-            FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).limitToLast(31).addChildEventListener(
-                    new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            if (dataSnapshot.getKey() != null) {
-                                Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
-                                if (calStart.getTime().compareTo(date) < 0 && date.compareTo(calEnd.getTime()) < 0) {
-                                    CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
-                                    totHoursShouldWork[0] += getSeconds(order.defaultHourToWork);
-                                    totHoursWorked[0] += (getSeconds(order.hourTo) - getSeconds(order.hourFrom));
-                                    totDays[0]++;
-
-                                    hourMonthFragment.writeHoursInGraphics(getHourFromSeconds(totHoursShouldWork[0]), getHourFromSeconds(totHoursWorked[0]), getHourFromSeconds(totHoursWorked[0] - totHoursShouldWork[0]), totDays[0]);
-                                }
+            FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).limitToLast(31).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        if (snap.getKey() != null) {
+                            Date date = new Date(Long.parseLong(snap.getKey()) * 1000L);
+                            if (calStart.getTime().compareTo(date) < 0 && date.compareTo(calEnd.getTime()) < 0) {
+                                CalendarOrder order = snap.getValue(CalendarOrder.class);
+                                totHoursShouldWork[0] += getSeconds(order.defaultHourToWork);
+                                totHoursWorked[0] += (getSeconds(order.hourTo) - getSeconds(order.hourFrom));
+                                totDays[0]++;
                             }
                         }
+                    }
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if (totDays[0] > 0) {
+                        hourMonthFragment.writeHoursInGraphics(getHourFromSeconds(totHoursShouldWork[0]), getHourFromSeconds(totHoursWorked[0]), getHourFromSeconds(totHoursWorked[0] - totHoursShouldWork[0]), totDays[0]);
+                    } else {
+                        hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
+                    }
+                }
 
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                            Toast.makeText(context, "onChildRemoved", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            Toast.makeText(context, "onChildMoved", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(context, "onCancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
     }
 
-    private Calendar initCalStart() {
+    private Calendar initCalStart(int month, int year) {
         Calendar calStart = Calendar.getInstance();
         calStart.set(Calendar.HOUR_OF_DAY, 0);
         calStart.set(Calendar.MINUTE, 0);
         calStart.set(Calendar.SECOND, 0);
         calStart.set(Calendar.MILLISECOND, 0);
+        calStart.set(Calendar.MONTH, month);
+        calStart.set(Calendar.YEAR, year);
         calStart.set(Calendar.DAY_OF_MONTH, calStart.getActualMinimum(Calendar.DAY_OF_MONTH));
 
         return calStart;
     }
 
-    private Calendar initCalEnd() {
+    private Calendar initCalEnd(int month, int year) {
         Calendar calEnd = Calendar.getInstance();
         calEnd.set(Calendar.HOUR_OF_DAY, 23);
         calEnd.set(Calendar.MINUTE, 59);
         calEnd.set(Calendar.SECOND, 59);
         calEnd.set(Calendar.MILLISECOND, 0);
+        calEnd.set(Calendar.MONTH, month);
+        calEnd.set(Calendar.YEAR, year);
         calEnd.set(Calendar.DAY_OF_MONTH, calEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
 
         return calEnd;

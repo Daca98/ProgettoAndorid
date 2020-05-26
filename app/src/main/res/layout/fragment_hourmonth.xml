@@ -12,8 +12,54 @@
         style="@style/BoxStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical" >
+        <TextView
+            style="@style/TitleTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/choose_period" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/choose_month"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="10dp"
+                android:spinnerMode="dialog"
+                android:textSize="12sp"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/choose_year"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:spinnerMode="dialog"
+                android:textSize="12sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/desc_hour_recap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/BoxStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical"
+        android:minHeight="50dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -25,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
                 android:text="@string/hourWork"/>
 
@@ -33,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"/>
         </RelativeLayout>
     </LinearLayout>
@@ -42,6 +90,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="1"
+        android:minHeight="50dp"
         android:gravity="center_vertical">
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -53,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
                 android:text="@string/hourReallyWork"/>
 
             <TextView
@@ -60,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"/>
         </RelativeLayout>
     </LinearLayout>
@@ -69,6 +120,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="1"
+        android:minHeight="50dp"
         android:gravity="center_vertical">
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -80,6 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
                 android:text="@string/extraordinary"/>
 
             <TextView
@@ -87,6 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"/>
         </RelativeLayout>
     </LinearLayout>

@@ -62,4 +62,23 @@
     <string name="detail">Detail</string>
     <string name="please_change_fields">Please change fields, or check its format, to save</string>
     <string name="save_data_success">Data saved with success</string>
+    <string name="attention">Attention</string>
+    <string name="from_label_recap">"Hours calculate from "</string>
+    <string name="to_label_recap">to</string>
+    <string name="choose_period">Choose period:</string>
+
+    <string-array name="months_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

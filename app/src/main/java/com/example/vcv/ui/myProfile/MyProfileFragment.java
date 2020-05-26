@@ -22,20 +22,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.example.vcv.activity.ForgotPasswordActivity;
 import com.example.vcv.R;
-import com.example.vcv.activity.MainActivity;
-import com.example.vcv.ui.calendar.CalendarViewModel;
+import com.example.vcv.activity.ForgotPasswordActivity;
 import com.example.vcv.utility.User;
 
 import java.io.File;
@@ -43,6 +33,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -209,6 +206,7 @@ public class MyProfileFragment extends Fragment {
 
         if ((!name.equals("") && !name.equals(user.name)) || (!surname.equals("") && !surname.equals(user.surname)) || (!telephone.equals("") && !telephone.equals(user.telephone))) {
             myProfileViewModel.writeNewDataInDB(new User(name, surname, telephone, user.badgeNumber, user.email));
+            Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), getString(R.string.change_field), Toast.LENGTH_SHORT).show();
         }

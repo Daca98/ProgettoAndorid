@@ -61,4 +61,23 @@
     <string name="detail">Dettaglio</string>
     <string name="please_change_fields">Modificare almeno un campo, o controllare il formato dei dati, per salvare</string>
     <string name="save_data_success">Dati salvati con successo</string>
+    <string name="attention">Attenzione</string>
+    <string name="from_label_recap">Ore calcolate dal</string>
+    <string name="to_label_recap">al</string>
+    <string name="choose_period">Scegli il periodo:</string>
+
+    <string-array name="months_array">
+        <item>Gennaio</item>
+        <item>Febbraio</item>
+        <item>Marzo</item>
+        <item>Aprile</item>
+        <item>Maggio</item>
+        <item>Giugno</item>
+        <item>Luglio</item>
+        <item>Agosto</item>
+        <item>Settembre</item>
+        <item>Ottobre</item>
+        <item>Novembre</item>
+        <item>Dicembre</item>
+    </string-array>
 </resources>
