@@ -14,26 +14,22 @@
         android:paddingRight="6dp">
 
         <EditText
+            style="@style/EditTextStyle"
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:drawableStart="@drawable/user"
             android:drawableLeft="@drawable/user"
-            android:drawablePadding="10dp"
-            android:hint="@string/name_capitalize"
-            android:inputType="text" />
+            android:hint="@string/name_capitalize" />
 
         <EditText
+            style="@style/EditTextStyle"
             android:id="@+id/et_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:drawableStart="@drawable/user"
             android:drawableLeft="@drawable/user"
-            android:drawablePadding="10dp"
-            android:hint="@string/surname_capitalize"
-            android:inputType="text" />
+            android:hint="@string/surname_capitalize" />
 
         <EditText
             android:id="@+id/et_telephone"
@@ -58,15 +54,13 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/et_badge_number_signin"
+            style="@style/EditTextStyle"
+            android:id="@+id/et_badge_signin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:drawableStart="@drawable/badge_number"
             android:drawableLeft="@drawable/badge_number"
-            android:drawablePadding="10dp"
-            android:hint="@string/badge_number"
-            android:inputType="text" />
+            android:hint="@string/badge_number" />
 
         <EditText
             android:id="@+id/et_password_signin"

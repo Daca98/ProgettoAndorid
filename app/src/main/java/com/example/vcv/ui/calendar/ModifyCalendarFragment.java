@@ -21,8 +21,7 @@ public class ModifyCalendarFragment extends Fragment {
     private CalendarOrder currentOrder;
     private CalendarFragment calendarFragment;
     private TextView hourStart, hourEnd, job;
-    private EditText etJob, etStartHour, etEndHour, etTotalHour, etEquipment, etNote;
-    TextView twExtraHour;
+    private EditText etJob, etStartHour, etEndHour, etTotalHour, etEquipment, etNote, twExtraHour;
     private Button modify;
 
     public ModifyCalendarFragment(CalendarFragment calendarFragment) {

@@ -256,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
         final String surname = ((EditText) findViewById(R.id.et_surname)).getText().toString();
         final String telephone = ((EditText) findViewById(R.id.et_telephone)).getText().toString();
         final String email = ((EditText) findViewById(R.id.et_email_signin)).getText().toString();
-        final String badgeNumber = ((EditText) findViewById(R.id.et_badge_number_signin)).getText().toString();
+        final String badgeNumber = ((EditText) findViewById(R.id.et_badge_signin)).getText().toString();
         String pssw = ((EditText) findViewById(R.id.et_password_signin)).getText().toString();
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
         final User user = new User(name, surname, telephone, badgeNumber, email);

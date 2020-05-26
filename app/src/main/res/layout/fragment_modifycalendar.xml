@@ -12,18 +12,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
+            style="@style/BoxStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:orientation="horizontal"
-            android:id="@+id/box_calendarHour"
-            android:layout_gravity="center"
-            android:background="@drawable/login_border"
-            android:padding="1dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="30dp">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/container_fragment"
@@ -87,7 +80,8 @@
                     android:id="@+id/boxJob"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="15dp">
                     <TextView
                         android:id="@+id/textJob"
                         android:layout_width="wrap_content"
@@ -116,30 +110,23 @@
             </LinearLayout>
 
             <LinearLayout
+                style="@style/BoxStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/login_border"
-                android:padding="1dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp">
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/containerHours"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <TextView
+                        style="@style/TitleTextStyle"
                         android:id="@+id/textEffectiveHours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="25dp"
                         android:paddingTop="15dp"
                         android:paddingRight="25dp"
-                        android:text="@string/effectiveHours"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="@string/effectiveHours"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,12 +134,11 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp">
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_Job"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/job"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/work"
                             android:drawableLeft="@drawable/work" />
                     </LinearLayout>
@@ -163,22 +149,20 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp">
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_startHour"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/StartHour"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/time"
                             android:drawableLeft="@drawable/time"
                             android:layout_alignParentLeft="true"/>
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_endHour"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/endHour"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/time"
                             android:drawableLeft="@drawable/time"
                             android:layout_alignParentRight="true"/>
@@ -190,40 +174,38 @@
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp">
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_totalHour"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/totalHour"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/time"
                             android:drawableLeft="@drawable/time" />
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_equipment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/equipment"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/build"
                             android:drawableLeft="@drawable/build" />
                         <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_note"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/note"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="10dp"
                             android:drawableStart="@drawable/ic_note_add_black_24dp"
                             android:drawableLeft="@drawable/ic_note_add_black_24dp" />
-                        <TextView
+                        <EditText
+                            style="@style/EditTextStyle"
                             android:id="@+id/et_extraordinaryHour"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:drawablePadding="18dp"
                             android:drawableStart="@drawable/time"
-                            android:drawableLeft="@drawable/time" />
+                            android:drawableLeft="@drawable/time"
+                            android:hint="@string/extraordinary"
+                            android:focusable="false"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -232,19 +214,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="15dp">
 
             <Button
+                style="@style/ButtonStyle"
                 android:id="@+id/button_modify"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
-                android:text="@string/confirm"
-                style="@style/ButtonStyle"/>
+                android:text="@string/confirm" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
     </LinearLayout>
 </ScrollView>

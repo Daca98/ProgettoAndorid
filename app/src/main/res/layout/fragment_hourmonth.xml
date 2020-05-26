@@ -9,34 +9,24 @@
     android:weightSum="8">
 
     <LinearLayout
+        style="@style/BoxStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
         android:layout_weight="1"
-        android:background="@drawable/login_border"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="1dp">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
-                android:text="@string/hourWork"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:text="@string/hourWork"/>
 
             <TextView
                 android:id="@+id/tw_tot_hours_should_work"
@@ -47,33 +37,23 @@
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout
+        style="@style/BoxStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="1"
-        android:layout_gravity="center"
-        android:background="@drawable/login_border"
-        android:padding="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:gravity="center_vertical">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
-                android:text="@string/hourReallyWork"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:text="@string/hourReallyWork"/>
 
             <TextView
                 android:id="@+id/tw_tot_hours_worked"
@@ -84,33 +64,23 @@
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout
+        style="@style/BoxStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="1"
-        android:layout_gravity="center"
-        android:background="@drawable/login_border"
-        android:padding="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:gravity="center_vertical">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/TitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
-                android:text="@string/extraordinary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:text="@string/extraordinary"/>
 
             <TextView
                 android:id="@+id/tw_tot_extra_hours_worked"

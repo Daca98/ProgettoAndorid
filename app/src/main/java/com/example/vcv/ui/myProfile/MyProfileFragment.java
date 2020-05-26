@@ -82,7 +82,7 @@ public class MyProfileFragment extends Fragment {
         final EditText etName = root.findViewById(R.id.et_name_user_data);
         final EditText etSurname = root.findViewById(R.id.et_surname_user_data);
         final EditText etPhone = root.findViewById(R.id.et_telephone_user_data);
-        final TextView etEmail = root.findViewById(R.id.et_email_signin_user_data);
+        final EditText etEmail = root.findViewById(R.id.et_email_signin_user_data);
         myProfileViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(@Nullable User u) {
