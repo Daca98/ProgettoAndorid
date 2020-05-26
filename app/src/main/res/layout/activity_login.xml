@@ -70,8 +70,7 @@
             android:id="@+id/b_access"
             android:layout_width="120dp"
             android:layout_height="40dp"
-            android:text="@string/login"
-            android:onClick="access"/>
+            android:text="@string/login"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"

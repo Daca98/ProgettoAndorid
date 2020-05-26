@@ -59,6 +59,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         insertFragmentLogin();
+        Button button_log_sign = (Button) findViewById(R.id.b_access);
+
+        button_log_sign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                access(view);
+            }
+        });
 
         //initialize for biometric authentication
         executor = ContextCompat.getMainExecutor(this);
@@ -142,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         if (isLogginin) {
             login(null);
         } else {
-            signin();
+            signin(view);
         }
     }
 
@@ -251,7 +259,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void signin() {
+    private void signin(final View view) {
         final String name = ((EditText) findViewById(R.id.et_name)).getText().toString();
         final String surname = ((EditText) findViewById(R.id.et_surname)).getText().toString();
         final String telephone = ((EditText) findViewById(R.id.et_telephone)).getText().toString();
@@ -261,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
         final User user = new User(name, surname, telephone, badgeNumber, email);
 
-        if (!name.equals("") && !surname.equals("") && !telephone.equals("") && !email.equals("") && !badgeNumber.equals("") && !pssw.equals("") && pssw.equals(psswConfirm)) {
+        if (!name.equals("") && !surname.equals("") && !telephone.equals("") && !email.equals("") && !badgeNumber.equals("") && !pssw.equals("") && pssw.equals(psswConfirm) && !(pssw.length()<6)) {
             mAuth.createUserWithEmailAndPassword(email, pssw)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -287,12 +295,14 @@ public class LoginActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
                                                                         Log.i("", "User added with success to user's collection");
+                                                                        mAuth.signOut();
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
                                                                         Log.e("", e.getMessage());
+                                                                        mAuth.signOut();
                                                                     }
                                                                 });
                                                     } else {
@@ -300,9 +310,9 @@ public class LoginActivity extends AppCompatActivity {
                                                         Toast.makeText(LoginActivity.this,
                                                                 getString(R.string.send_email_error),
                                                                 Toast.LENGTH_SHORT).show();
+                                                        mAuth.signOut();
                                                     }
-                                                    mAuth.signOut();
-                                                    insertFragmentLogin();
+                                                    clickLoginTab(view);
                                                 }
                                             });
                                 }
@@ -313,6 +323,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+        }
+        else{
+            Toast.makeText(LoginActivity.this, getString(R.string.please_change_fields), Toast.LENGTH_SHORT).show();
         }
     }
 

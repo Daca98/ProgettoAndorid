@@ -53,7 +53,6 @@ public class CalendarViewModel extends ViewModel {
                     new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            //Toast.makeText(context, "onChildAdded", Toast.LENGTH_SHORT).show();
                             CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
                             Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -68,7 +67,6 @@ public class CalendarViewModel extends ViewModel {
 
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            //Toast.makeText(context, "onChildChanged", Toast.LENGTH_SHORT).show();
                             CalendarOrder order = dataSnapshot.getValue(CalendarOrder.class);
                             Date date = new Date(Long.parseLong(dataSnapshot.getKey()) * 1000L);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -79,17 +77,14 @@ public class CalendarViewModel extends ViewModel {
 
                         @Override
                         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                            Toast.makeText(context, "onChildRemoved", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            Toast.makeText(context, "onChildMoved", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(context, "onCancelled", Toast.LENGTH_SHORT).show();
                         }
                     });
         }

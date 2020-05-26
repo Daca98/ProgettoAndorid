@@ -1,5 +1,7 @@
 package com.example.vcv.activity;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.File;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -103,6 +106,15 @@ public class MainActivity extends AppCompatActivity {
             mAuth.signOut();
             QueryDB db = new QueryDB(MainActivity.this);
             db.cleanLogout();
+            try {
+                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+                File f = new File(directory, "profile.jpg");
+                f.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             finish();
             return true;
         }
