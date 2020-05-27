@@ -1,6 +1,7 @@
 package com.example.vcv.ui.hourMonth;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.vcv.utility.CalendarOrder;
 import com.example.vcv.utility.QueryDB;
@@ -18,16 +19,30 @@ import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class HourMonthViewModel extends ViewModel {
     public static Context context;
     public static HourMonthFragment hourMonthFragment;
     private static QueryDB db;
 
+    /**
+     * Method use to get logged user from local db
+     *
+     * @return logged user
+     */
     private User getUserFromLocalDB() {
         db = new QueryDB(context);
         return db.readUser();
     }
 
+    /**
+     * Method used to get hours recap from firebase or local db and also calculate it if is the current month and year
+     *
+     * @param keyRecap
+     */
     public void getMonthHoursRecap(String keyRecap) {
         final User user = getUserFromLocalDB();
         final Calendar calStart = initCalStart();
@@ -42,6 +57,11 @@ public class HourMonthViewModel extends ViewModel {
             if (Integer.parseInt(keyRecap.split("-")[0]) == Integer.parseInt(new SimpleDateFormat("yyyy").format(today)) &&
                     Integer.parseInt(keyRecap.split("-")[1]) == Integer.parseInt(new SimpleDateFormat("MM").format(today))) {
                 FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).limitToLast(31).addListenerForSingleValueEvent(new ValueEventListener() {
+                    /**
+                     * Handle the snapshot of referenced data. This method is triggered only once
+                     *
+                     * @param dataSnapshot
+                     */
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Calendar c = Calendar.getInstance();
@@ -77,13 +97,20 @@ public class HourMonthViewModel extends ViewModel {
                             );
                             hourMonthFragment.writeHoursInGraphics(recapHours.totHoursShouldWork, recapHours.totHoursWorked, recapHours.totExtra, Integer.parseInt(recapHours.toCalculation.split("-")[2]));
                             FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(keyRecap).setValue(recapHours);
+                            Log.i("RECAP_MONTH", "Month's recap hours updated on firebase");
                         } else {
                             hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
                         }
                     }
 
+                    /**
+                     * Handle the error occured while retriving data. This method is triggered only once
+                     *
+                     * @param databaseError
+                     */
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("RECAP_MONTH", databaseError.getMessage());
                     }
                 });
             } else {
@@ -97,6 +124,11 @@ public class HourMonthViewModel extends ViewModel {
                     hourMonthFragment.writeHoursInGraphics(recap.totHoursShouldWork, recap.totHoursWorked, recap.totExtra, Integer.parseInt(recap.toCalculation.split("-")[2]));
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(keyRecap).addListenerForSingleValueEvent(new ValueEventListener() {
+                        /**
+                         * Handle the snapshot of referenced data. This method is triggered only once
+                         *
+                         * @param dataSnapshot
+                         */
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot != null) {
@@ -105,6 +137,7 @@ public class HourMonthViewModel extends ViewModel {
                                 if (recap != null) {
                                     hourMonthFragment.writeHoursInGraphics(recap.totHoursShouldWork, recap.totHoursWorked, recap.totExtra, Integer.parseInt(recap.toCalculation.split("-")[2]));
                                     db.insertRecap(recap);
+                                    Log.i("RECAP_MONTH", "Recap inserted in local db");
                                 } else {
                                     hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
                                 }
@@ -113,8 +146,14 @@ public class HourMonthViewModel extends ViewModel {
                             }
                         }
 
+                        /**
+                         * Handle the error occured while retriving data. This method is triggered only once
+                         *
+                         * @param databaseError
+                         */
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("RECAP_MONTH", databaseError.getMessage());
                         }
                     });
                 }
@@ -122,6 +161,11 @@ public class HourMonthViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Method used to initialize calendar object to first day of current month
+     *
+     * @return calendar object initialize to the first day of current month
+     */
     private Calendar initCalStart() {
         Calendar calStart = Calendar.getInstance();
         calStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -133,6 +177,11 @@ public class HourMonthViewModel extends ViewModel {
         return calStart;
     }
 
+    /**
+     * Method used to initialize calendar object to last day of current month
+     *
+     * @return calendar object initialize to the last day of current month
+     */
     private Calendar initCalEnd() {
         Calendar calEnd = Calendar.getInstance();
         calEnd.set(Calendar.HOUR_OF_DAY, 23);
@@ -144,6 +193,12 @@ public class HourMonthViewModel extends ViewModel {
         return calEnd;
     }
 
+    /**
+     * Method used to convert string to long that rappresent hours and minutes in seconds
+     *
+     * @param hour
+     * @return long that rappresent hours and minutes in seconds
+     */
     private long getSeconds(String hour) {
         long hourSeconds = Integer.parseInt(hour.split(":")[0]) * 3600;
         long minutesSeconds = Integer.parseInt(hour.split(":")[1]) * 60;
@@ -151,6 +206,12 @@ public class HourMonthViewModel extends ViewModel {
         return hourSeconds + minutesSeconds;
     }
 
+    /**
+     * Method used to convert long into String that rappresent hour and minutes from seconds
+     *
+     * @param seconds
+     * @return String that rappresent hour and minutes from seconds
+     */
     private String getHourFromSeconds(long seconds) {
         String res = "";
 

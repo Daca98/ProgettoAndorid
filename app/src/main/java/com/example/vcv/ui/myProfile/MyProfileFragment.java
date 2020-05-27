@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,10 @@ import androidx.lifecycle.ViewModelProviders;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class MyProfileFragment extends Fragment {
 
     private User user;
@@ -58,6 +63,14 @@ public class MyProfileFragment extends Fragment {
         }
     };
 
+    /**
+     * Method used to create the fragment
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MyProfileViewModel.context = this.getContext();
@@ -68,6 +81,11 @@ public class MyProfileFragment extends Fragment {
 
         Button b_changePassword = root.findViewById(R.id.b_change_password);
         b_changePassword.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method used to handle event of change password button
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(root.getContext(), ForgotPasswordActivity.class);
@@ -81,6 +99,11 @@ public class MyProfileFragment extends Fragment {
         final EditText etPhone = root.findViewById(R.id.et_telephone_user_data);
         final EditText etEmail = root.findViewById(R.id.et_email_signin_user_data);
         myProfileViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            /**
+             * Method used to observe change of user
+             *
+             * @param u
+             */
             @Override
             public void onChanged(@Nullable User u) {
                 if (u != null) {
@@ -95,6 +118,11 @@ public class MyProfileFragment extends Fragment {
 
         Button b_editProfilePicture = root.findViewById(R.id.b_edit_profile_picture);
         b_editProfilePicture.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method used to handle change of the picture button
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 // Check if there are permissions.
@@ -111,6 +139,11 @@ public class MyProfileFragment extends Fragment {
 
         Button b_removeProfilePicture = root.findViewById(R.id.b_remove_profile_picture);
         b_removeProfilePicture.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method used to remove image from the storage
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 removeImageFromStorage();
@@ -119,6 +152,11 @@ public class MyProfileFragment extends Fragment {
 
         Button b_saveChanges = root.findViewById(R.id.save_changes);
         b_saveChanges.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method used to save profile's changes
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 saveChanges();
@@ -128,6 +166,9 @@ public class MyProfileFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Method invoked when fragment is again interactive
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -135,6 +176,13 @@ public class MyProfileFragment extends Fragment {
         handler.postDelayed(waitingTaskForLoadImage, 10);
     }
 
+    /**
+     * Method to handle the result of sub-activity
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,15 +194,18 @@ public class MyProfileFragment extends Fragment {
                 switch (requestCode) {
                     case 0:
                         if (requestCode == RESULT_LOAD_IMAGE_FROM_CAMERA && resultCode == RESULT_OK && data != null) {
+                            Log.i("IMAGE_LOADED", "A photo has been taken");
                             Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                             new SaveImage(selectedImage).execute();
                         } else {
+                            Log.e("IMAGE_LOADED", "A photo has not been taken");
                             Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
                             stopProgressBar();
                         }
                         break;
                     case 1:
                         if (requestCode == RESULT_LOAD_IMAGE_FROM_GALLERY && resultCode == RESULT_OK && data != null) {
+                            Log.i("IMAGE_LOADED", "A photo has been choosen from the gallery");
                             Uri selectedImage = data.getData();
                             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -168,6 +219,7 @@ public class MyProfileFragment extends Fragment {
 
                                 new SaveImage(BitmapFactory.decodeFile(picturePath)).execute();
                             } else {
+                                Log.e("IMAGE_LOADED", "A photo can not be loaded");
                                 Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
                                 stopProgressBar();
                             }
@@ -175,16 +227,23 @@ public class MyProfileFragment extends Fragment {
                         break;
                 }
             } else {
+                Log.e("IMAGE_LOADED", "A photo can not be loaded");
                 Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
                 stopProgressBar();
             }
         } catch (Exception e) {
+            Log.e("IMAGE_LOADED", "A photo can not be loaded " + e.getMessage());
             Toast.makeText(getContext(), getString(R.string.can_not_load_image), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
             stopProgressBar();
         }
     }
 
+    /**
+     * Method used
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         try {

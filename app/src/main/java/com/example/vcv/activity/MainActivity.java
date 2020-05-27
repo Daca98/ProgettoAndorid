@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.vcv.R;
 import com.example.vcv.utility.CalendarOrder;
@@ -41,10 +40,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity {
 
     private CompactCalendarView compactCalendar;
 
+    /**
+     * Create main activity
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,30 +70,42 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    /**
+                     * Callback triggered when you can get instance id
+                     *
+                     * @param task
+                     */
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
-                            Log.w("", "getInstanceId failed", task.getException());
+                            Log.e("NOTIFICATION", "Get instance id failed ", task.getException());
                             return;
                         }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
 
                         if (Locale.getDefault().getLanguage().equals("it")) {
                             FirebaseMessaging.getInstance().unsubscribeFromTopic("all-en");
                             FirebaseMessaging.getInstance().subscribeToTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                /**
+                                 * Callback triggered when user is subscribed with success to a specific topic for firebase notification
+                                 *
+                                 * @param aVoid
+                                 */
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d("FIREBASE_NOTIFICATIONS", "User has been registered with success to '" + getLocaleTopic() + "' topic");
+                                    Log.i("FIREBASE_NOTIFICATIONS", "User has been registered with success to '" + getLocaleTopic() + "' topic");
                                 }
                             });
                         } else if (Locale.getDefault().getLanguage().equals("en")) {
                             FirebaseMessaging.getInstance().unsubscribeFromTopic("all-it");
                             FirebaseMessaging.getInstance().subscribeToTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                /**
+                                 * Callback triggered when user is subscribed with success to a specific topic for firebase notification
+                                 *
+                                 * @param aVoid
+                                 */
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d("FIREBASE_NOTIFICATIONS", "User has been registered with success to '" + getLocaleTopic() + "' topic");
+                                    Log.i("FIREBASE_NOTIFICATIONS", "User has been registered with success to '" + getLocaleTopic() + "' topic");
                                 }
                             });
                         }
@@ -95,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
         getMonthHoursRecap();
     }
 
+    /**
+     * Method to inflate menu (logout)
+     *
+     * @param menu
+     * @return boolean depends on inflate operation
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -102,28 +128,40 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Method to handle click of top menu (logout)
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.logoff) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                /**
+                 * Callback triggered when user is removed with success from firebase notification topic
+                 *
+                 * @param aVoid
+                 */
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Log.d("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
+                    Log.i("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
                 }
             });
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
             QueryDB db = new QueryDB(MainActivity.this);
             db.cleanLogout();
+            Log.i("LOGOUT", "User removed from firebase and local db");
             try {
                 ContextWrapper cw = new ContextWrapper(getApplicationContext());
                 File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
                 File f = new File(directory, "profile.jpg");
                 f.delete();
+                Log.i("LOGOUT", "User's profile picture removed");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -134,10 +172,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method use to get name of topic where register the user for firebase notification
+     *
+     * @return the name of firebase's topic to subscribe user. It depends on the device language to get the notification in the right language
+     */
     private String getLocaleTopic() {
         return "all-" + Locale.getDefault().getLanguage();
     }
 
+    /**
+     * Method used to calculate recap of month's hours including extraordinary hours. It works on current month and, if necessary, on the previous one
+     */
     private void getMonthHoursRecap() {
         final User user = getUserFromLocalDB();
 
@@ -157,15 +203,26 @@ public class MainActivity extends AppCompatActivity {
             final int[] numDaysToLoad = {62};
 
             FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(new SimpleDateFormat("yyyy-MM").format(prevCalStart.getTime())).addListenerForSingleValueEvent(new ValueEventListener() {
+                /**
+                 * Handle the snapshot of referenced data. This method is triggered only once
+                 *
+                 * @param dataSnapshot
+                 */
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     RecapHours recapHoursPrevMonth = dataSnapshot.getValue(RecapHours.class);
 
                     if (recapHoursPrevMonth != null && Integer.parseInt(recapHoursPrevMonth.toCalculation.split("-")[2]) == prevCalStart.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                        Log.i("RECAP_MONTH", "Last month recap hours is already complete");
                         numDaysToLoad[0] = 31;
                     }
 
                     FirebaseDatabase.getInstance().getReference().child("orders").child(user.badgeNumber).limitToLast(numDaysToLoad[0]).addListenerForSingleValueEvent(new ValueEventListener() {
+                        /**
+                         * Handle the snapshot of referenced data. This method is triggered only once
+                         *
+                         * @param dataSnapshot
+                         */
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Calendar c = Calendar.getInstance();
@@ -214,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                                             getHourFromSeconds(prevTotHoursWorked[0] - prevTotHoursShouldWork[0])
                                     );
                                     FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(prevKeyRecap).setValue(recapHours);
+                                    Log.i("RECAP_MONTH", "Previous month recap hours updated on firebase");
                                 }
                             }
 
@@ -227,27 +285,50 @@ public class MainActivity extends AppCompatActivity {
                                         getHourFromSeconds(totHoursWorked[0] - totHoursShouldWork[0])
                                 );
                                 FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(keyRecap).setValue(recapHours);
+                                Log.i("RECAP_MONTH", "Current month recap hours updated on firebase");
                             }
                         }
 
+                        /**
+                         * Handle the error occured while retriving data. This method is triggered only once
+                         *
+                         * @param databaseError
+                         */
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("RECAP_MONTH", databaseError.getMessage());
                         }
                     });
                 }
 
+                /**
+                 * Handle the error occured while retriving data. This method is triggered only once
+                 *
+                 * @param databaseError
+                 */
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("RECAP_MONTH", databaseError.getMessage());
                 }
             });
         }
     }
 
+    /**
+     * Method use to get logged user from local db
+     *
+     * @return logged user
+     */
     private User getUserFromLocalDB() {
         QueryDB db = new QueryDB(this.getApplicationContext());
         return db.readUser();
     }
 
+    /**
+     * Method used to initialize calendar object to first day of previous month
+     *
+     * @return calendar object initialize to the first day of previous month
+     */
     private Calendar prevInitCalStart() {
         Calendar calStart = Calendar.getInstance();
         calStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -260,6 +341,11 @@ public class MainActivity extends AppCompatActivity {
         return calStart;
     }
 
+    /**
+     * Method used to initialize calendar object to last day of previous month
+     *
+     * @return calendar object initialize to the last day of previous month
+     */
     private Calendar prevInitCalEnd() {
         Calendar calEnd = Calendar.getInstance();
         calEnd.set(Calendar.HOUR_OF_DAY, 23);
@@ -272,6 +358,11 @@ public class MainActivity extends AppCompatActivity {
         return calEnd;
     }
 
+    /**
+     * Method used to initialize calendar object to first day of current month
+     *
+     * @return calendar object initialize to the first day of current month
+     */
     private Calendar initCalStart() {
         Calendar calStart = Calendar.getInstance();
         calStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -283,6 +374,11 @@ public class MainActivity extends AppCompatActivity {
         return calStart;
     }
 
+    /**
+     * Method used to initialize calendar object to last day of current month
+     *
+     * @return calendar object initialize to the last day of current month
+     */
     private Calendar initCalEnd() {
         Calendar calEnd = Calendar.getInstance();
         calEnd.set(Calendar.HOUR_OF_DAY, 23);
@@ -294,6 +390,12 @@ public class MainActivity extends AppCompatActivity {
         return calEnd;
     }
 
+    /**
+     * Method used to convert string to long that rappresent hours and minutes in seconds
+     *
+     * @param hour
+     * @return long that rappresent hours and minutes in seconds
+     */
     private long getSeconds(String hour) {
         long hourSeconds = Integer.parseInt(hour.split(":")[0]) * 3600;
         long minutesSeconds = Integer.parseInt(hour.split(":")[1]) * 60;
@@ -301,6 +403,12 @@ public class MainActivity extends AppCompatActivity {
         return hourSeconds + minutesSeconds;
     }
 
+    /**
+     * Method used to convert long into String that rappresent hour and minutes from seconds
+     *
+     * @param seconds
+     * @return String that rappresent hour and minutes from seconds
+     */
     private String getHourFromSeconds(long seconds) {
         String res = "";
 

@@ -1,6 +1,7 @@
 package com.example.vcv.ui.hourMonth;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class HourMonthFragment extends Fragment {
 
     private HourMonthViewModel hourMonthViewModel;
@@ -34,6 +39,14 @@ public class HourMonthFragment extends Fragment {
     boolean firstLoadMonth = true;
     boolean firstLoadYear = true;
 
+    /**
+     * Method used to create the fragment
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View to inflate in the graphics
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HourMonthViewModel.context = this.getContext();
         HourMonthViewModel.hourMonthFragment = this;
@@ -49,6 +62,11 @@ public class HourMonthFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Method used to initialize graphic components
+     *
+     * @param root
+     */
     private void initGraphics(View root) {
         attention = root.findViewById(R.id.desc_hour_recap);
         hoursShouldWork = root.findViewById(R.id.tw_tot_hours_should_work);
@@ -64,6 +82,14 @@ public class HourMonthFragment extends Fragment {
         monthChoices.setSelection(currentMonthSpinner);
         monthSelected = currentMonthSpinner;
         monthChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Define operation to perform when an item is clicked
+             *
+             * @param adapterView
+             * @param view
+             * @param i
+             * @param l
+             */
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
@@ -80,9 +106,12 @@ public class HourMonthFragment extends Fragment {
                 }
             }
 
+            /**
+             *
+             * @param adapterView
+             */
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -99,6 +128,14 @@ public class HourMonthFragment extends Fragment {
         yearsChoices.setSelection(currentYearSpinner);
         yearSelected = Integer.parseInt(currentYear);
         yearsChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Define operation to perform when an item is clicked
+             *
+             * @param adapterView
+             * @param view
+             * @param i
+             * @param l
+             */
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (!firstLoadYear) {
@@ -108,13 +145,24 @@ public class HourMonthFragment extends Fragment {
                 firstLoadYear = false;
             }
 
+            /**
+             *
+             * @param adapterView
+             */
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
 
+    /**
+     * Method used to write the result in graphic
+     *
+     * @param totHoursShouldWork
+     * @param totHoursWorked
+     * @param totExtraHours
+     * @param daysCalculatedOn
+     */
     public final void writeHoursInGraphics(String totHoursShouldWork, String totHoursWorked, String totExtraHours, int daysCalculatedOn) {
         attention.setText(getString(R.string.from_label_recap) + " " + getFirstDayOfMonth() + " " + getString(R.string.to_label_recap) + " " + getFinalDayRecap(daysCalculatedOn));
         hoursShouldWork.setText(totHoursShouldWork);
@@ -122,10 +170,20 @@ public class HourMonthFragment extends Fragment {
         hoursExtra.setText(totExtraHours);
     }
 
+    /**
+     * Method use to get the date of the first day of month
+     *
+     * @return string that rappresent date of the first day of month
+     */
     private String getFirstDayOfMonth() {
         return "01/" + String.format("%02d", (monthSelected + 1)) + "/" + String.format("%02d", yearSelected);
     }
 
+    /**
+     * Method use to get the date of the last day of month
+     *
+     * @return string that rappresent date of the last day of month
+     */
     private String getFinalDayRecap(int daysCalculatedOn) {
         int day = daysCalculatedOn > 0 ? daysCalculatedOn : 1;
         return day + "/" + String.format("%02d", (monthSelected + 1)) + "/" + String.format("%02d", yearSelected);

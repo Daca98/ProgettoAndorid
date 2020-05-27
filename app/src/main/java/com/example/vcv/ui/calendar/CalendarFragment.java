@@ -1,6 +1,7 @@
 package com.example.vcv.ui.calendar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class CalendarFragment extends Fragment {
 
     private CalendarViewModel calendarViewModel;
@@ -41,6 +45,14 @@ public class CalendarFragment extends Fragment {
     public CalendarOrder currentOrder = null;
     public Boolean useRemoteDate = false;
 
+    /**
+     * Method used to create the fragment
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View to inflate in the graphics
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
         CalendarViewModel.calendarFragment = this;
@@ -66,13 +78,21 @@ public class CalendarFragment extends Fragment {
 
         //listener for calendar
         compactCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            //when click one day
+            /**
+             * Method to handle when click one day on the calendar
+             *
+             * @param dateClicked
+             */
             @Override
             public void onDayClick(Date dateClicked) {
                 getInfoCurrentDay(dateClicked);
             }
 
-            //when scroll on months
+            /**
+             * Method to handle scroll between with months
+             *
+             * @param firstDayOfNewMonth
+             */
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 //Set the month on top of the calendar
@@ -86,6 +106,11 @@ public class CalendarFragment extends Fragment {
 
         //Listener to confirm have seen order
         confirm.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method to handle click on confirm button
+             *
+             * @param v
+             */
             public void onClick(View v) {
                 // save data on firebase
                 calendarViewModel.setConfirmed(currentOrder);
@@ -97,6 +122,7 @@ public class CalendarFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                Log.i("CONFIRM_CALENDAR", "Day has been confirmed");
                 Toast.makeText(getContext(), getString(R.string.day_confirmed), Toast.LENGTH_SHORT).show();
                 setSaveAndChangeStatus(false, false);
             }
@@ -104,6 +130,11 @@ public class CalendarFragment extends Fragment {
 
         //Listener to open modify calendar
         modify.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Method used to open the day's detail fragment
+             *
+             * @param v
+             */
             public void onClick(View v) {
                 ModifyCalendarFragment modifyCalendarFragment = new ModifyCalendarFragment(CalendarFragment.this);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -117,6 +148,12 @@ public class CalendarFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Method use to set events in the calendar
+     *
+     * @param order
+     * @throws ParseException
+     */
     public void setCalendar(CalendarOrder order) throws ParseException {
         calendarOrders.add(order);
         Event ev;
@@ -126,6 +163,7 @@ public class CalendarFragment extends Fragment {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = dateFormat.parse(order.dateCalendarOrder);
                 ev = new Event(R.color.colorWhite, date.getTime());
+                compactCalendar.removeEvent(ev);
                 compactCalendar.addEvent(ev);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -137,6 +175,11 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+    /**
+     * Method use to set data of a specific order in the bottom box
+     *
+     * @param order
+     */
     public void setData(CalendarOrder order) {
         if (order != null) {
             currentOrder = order;
@@ -160,11 +203,23 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+    /**
+     * Method used to convert data object to string
+     *
+     * @param date
+     * @return string that rappresent the param date
+     * @throws ParseException
+     */
     private String convertData(Date date) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
     }
 
+    /**
+     * Method used to get info to get info of the clicked date
+     *
+     * @param dateClicked
+     */
     private void getInfoCurrentDay(Date dateClicked) {
         confirm.setEnabled(true);
         useRemoteDate = true;
@@ -192,6 +247,11 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+    /**
+     * Method used to modify order in local variable after change it in the detail fragment
+     *
+     * @param order
+     */
     public void checkOnLocalData(CalendarOrder order) {
         int index = -1;
         int i = 0;
@@ -227,8 +287,12 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    // areEnabled = define if confirm button has to be enabled or disabled and if modify button has to show text "modify" or "detail"
-    // forceDisableModify = define if also modify button has to be disabled
+    /**
+     * Method use to enable and disable confirm and detail/modify button based on
+     *
+     * @param areEnabled         = define if confirm button has to be enabled or disabled and if modify button has to show text "modify" or "detail"
+     * @param forceDisableModify = define if also modify button has to be disabled
+     */
     private void setSaveAndChangeStatus(boolean areEnabled, boolean forceDisableModify) {
         confirm.setEnabled(areEnabled);
         if (areEnabled) {

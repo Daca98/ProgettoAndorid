@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.vcv.R;
 import com.example.vcv.ui.login.LoginFragment;
 import com.example.vcv.ui.signin.SigninFragment;
-import com.example.vcv.utility.CalendarOrder;
 import com.example.vcv.utility.QueryDB;
 import com.example.vcv.utility.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.Locale;
+import java.util.concurrent.Executor;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
@@ -39,9 +41,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.Locale;
-import java.util.concurrent.Executor;
-
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class LoginActivity extends AppCompatActivity {
     private int REQUEST_CODE_FORGOT_PASSWORD = 0;
     private FirebaseAuth mAuth;
@@ -54,7 +57,11 @@ public class LoginActivity extends AppCompatActivity {
     private BiometricPrompt.PromptInfo promptInfo;
     FirebaseUser currentUser;
 
-
+    /**
+     * Create login activity
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,11 @@ public class LoginActivity extends AppCompatActivity {
         Button button_log_sign = (Button) findViewById(R.id.b_access);
 
         button_log_sign.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handle click of login button
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 access(view);
@@ -73,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
         executor = ContextCompat.getMainExecutor(this);
         biometricPrompt = new BiometricPrompt(LoginActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
+            /**
+             * Handle biometric authentication error
+             *
+             * @param errorCode
+             * @param errString
+             */
             @Override
             public void onAuthenticationError(int errorCode,
                                               @NonNull CharSequence errString) {
@@ -80,24 +98,35 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.authentication_failed), Toast.LENGTH_SHORT)
                         .show();
+                Log.e("BIOMETRIC_AUTH", "Biometric authentication error");
                 logout();
             }
 
+            /**
+             * Handle biometric authentication success
+             *
+             * @param result
+             */
             @Override
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.authentication_succes), Toast.LENGTH_SHORT).show();
+                Log.i("BIOMETRIC_AUTH", "Biometric authentication success");
                 login(currentUser);
             }
 
+            /**
+             * Handle biometric authentication failed
+             */
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
                 Toast.makeText(getApplicationContext(), getString(R.string.authentication_failed),
                         Toast.LENGTH_SHORT)
                         .show();
+                Log.e("BIOMETRIC_AUTH", "Biometric authentication failed");
             }
         });
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
@@ -124,6 +153,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle click on login tab and set background based on the selected item (login)
+     *
+     * @param view
+     */
     // Handler
     public void clickLoginTab(View view) {
         Button TLogin = findViewById(R.id.b_login);
@@ -136,6 +170,11 @@ public class LoginActivity extends AppCompatActivity {
         isLogginin = true;
     }
 
+    /**
+     * Handle click on login tab and set background based on the selected item (signin)
+     *
+     * @param view
+     */
     public void clickSigninTab(View view) {
         Button TLogin = findViewById(R.id.b_login);
         Button TSignin = findViewById(R.id.b_signin);
@@ -147,6 +186,11 @@ public class LoginActivity extends AppCompatActivity {
         isLogginin = false;
     }
 
+    /**
+     * Method to login or signin based on the selected tab
+     *
+     * @param view
+     */
     public void access(View view) {
         if (isLogginin) {
             login(null);
@@ -155,12 +199,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Start forgot password activity with an intent
+     *
+     * @param view
+     */
     public void forgotPassword(View view) {
         Intent myIntent = new Intent(this, ForgotPasswordActivity.class);
         startActivityForResult(myIntent, REQUEST_CODE_FORGOT_PASSWORD);
     }
 
     // Utility
+
+    /**
+     * Method to switch to login fragment
+     */
     private void insertFragmentLogin() {
         LinearLayout containerFragment = findViewById(R.id.container_fragment);
         containerFragment.setPadding(15, 10, 15, 70);
@@ -177,6 +230,9 @@ public class LoginActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Method to switch to signin fragment
+     */
     private void insertFragmentSignin() {
         LinearLayout containerFragment = findViewById(R.id.container_fragment);
         containerFragment.setPadding(15, 10, 15, 35);
@@ -193,6 +249,11 @@ public class LoginActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Method use for login with firebase
+     *
+     * @param user
+     */
     private void login(FirebaseUser user) {
         String email = "";
         String password = "";
@@ -200,6 +261,11 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             try {
                 user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    /**
+                     * Callback triggered when task is completed
+                     *
+                     * @param task
+                     */
                     @Override
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
@@ -209,7 +275,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                Log.e("", e.getMessage());
+                Log.e("AUTHENTICATION", "The authentication error is " + e.getMessage());
             }
         } else {
             email = ((EditText) findViewById(R.id.et_email)).getText().toString();
@@ -218,6 +284,11 @@ public class LoginActivity extends AppCompatActivity {
             if (!email.equals("") && !password.equals("")) {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            /**
+                             * Callback triggered when sign in with email and password on firebase is completed
+                             *
+                             * @param task
+                             */
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 FirebaseUser user = mAuth.getCurrentUser();
@@ -226,40 +297,57 @@ public class LoginActivity extends AppCompatActivity {
                                         // Download firebase data and insert them in sqlite
                                         DatabaseReference dbFirebase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
                                         dbFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            /**
+                                             * Handle the snapshot of referenced data. This method is triggered only once
+                                             *
+                                             * @param dataSnapshot
+                                             */
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 User completeUser = dataSnapshot.getValue(User.class);
 
                                                 if (completeUser != null) {
+                                                    Log.i("AUTHENTICATION", "Login in successful");
                                                     QueryDB db = new QueryDB(LoginActivity.this);
                                                     db.insertUserData(completeUser);
                                                     goToMainActivity();
                                                 }
                                             }
 
+                                            /**
+                                             * Handle the error occured while retriving data. This method is triggered only once
+                                             *
+                                             * @param databaseError
+                                             */
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Log.e("", databaseError.getMessage());
+                                                Log.e("AUTHENTICATION", databaseError.getMessage());
                                             }
                                         });
                                     } else {
                                         // If sign goes wrong, display a message to the user
-                                        Log.w("", "signInWithEmail:failure", task.getException());
+                                        Log.e("AUTHENTICATION", "Login failure", task.getException());
                                         Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     // If sign goes wrong, display a message to the user
-                                    Log.w("", "signInWithEmail:failure", task.getException());
+                                    Log.e("AUTHENTICATION", "Login failure", task.getException());
                                     Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             } else {
+                Log.e("AUTHENTICATION", "Missing email or password");
                 Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    /**
+     * Method use for signin user on firebase
+     *
+     * @param view
+     */
     private void signin(final View view) {
         final String name = ((EditText) findViewById(R.id.et_name)).getText().toString();
         final String surname = ((EditText) findViewById(R.id.et_surname)).getText().toString();
@@ -270,18 +358,28 @@ public class LoginActivity extends AppCompatActivity {
         String psswConfirm = ((EditText) findViewById(R.id.et_confirm_password_signin)).getText().toString();
         final User user = new User(name, surname, telephone, badgeNumber, email);
 
-        if (!name.equals("") && !surname.equals("") && !telephone.equals("") && !email.equals("") && !badgeNumber.equals("") && !pssw.equals("") && pssw.equals(psswConfirm) && !(pssw.length()<6)) {
+        if (!name.equals("") && !surname.equals("") && !telephone.equals("") && !email.equals("") && !badgeNumber.equals("") && !pssw.equals("") && pssw.equals(psswConfirm) && !(pssw.length() < 6)) {
             mAuth.createUserWithEmailAndPassword(email, pssw)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        /**
+                         * Callback triggered when the user has been created on firebase
+                         *
+                         * @param task
+                         */
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("", "createUserWithEmail:success");
+                                Log.i("REGISTRATION", "Create with success user with email and password");
                                 final FirebaseUser userFirebase = mAuth.getCurrentUser();
                                 if (userFirebase != null) {
                                     userFirebase.sendEmailVerification()
                                             .addOnCompleteListener(new OnCompleteListener() {
+                                                /**
+                                                 * Callback triggered when email has been sent
+                                                 *
+                                                 * @param task
+                                                 */
                                                 @Override
                                                 public void onComplete(@NonNull Task task) {
                                                     if (task.isSuccessful()) {
@@ -293,21 +391,31 @@ public class LoginActivity extends AppCompatActivity {
                                                         mDatabase = FirebaseDatabase.getInstance().getReference();
                                                         mDatabase.child("users").child(userFirebase.getUid()).setValue(user)
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    /**
+                                                                     * Callback triggered when user is inserted with success in firebase users' collection
+                                                                     *
+                                                                     * @param aVoid
+                                                                     */
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
-                                                                        Log.i("", "User added with success to user's collection");
+                                                                        Log.i("REGISTRATION", "User added with success to users' collection");
                                                                         mAuth.signOut();
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
+                                                                    /**
+                                                                     * Callback triggered when user can not be inserted in firebase users' collection
+                                                                     *
+                                                                     * @param e
+                                                                     */
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
-                                                                        Log.e("", e.getMessage());
+                                                                        Log.e("REGISTRATION", "User can not be inserted in firebase users' collection" + e.getMessage());
                                                                         mAuth.signOut();
                                                                     }
                                                                 });
                                                     } else {
-                                                        Log.e("", "sendEmailVerification", task.getException());
+                                                        Log.e("REGISTRATION", "Failed to send verification email");
                                                         Toast.makeText(LoginActivity.this,
                                                                 getString(R.string.send_email_error),
                                                                 Toast.LENGTH_SHORT).show();
@@ -319,22 +427,30 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             } else {
                                 // If sign in goes wrong, display a message to the userf
-                                Log.w("", "createUserWithEmail:failure", task.getException());
+                                Log.e("REGISTRATION", "Can not create user with email and password on firebase");
                                 Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-        }
-        else{
+        } else {
+            Log.e("REGISTRATION", "Some mandatory fields are missing");
             Toast.makeText(LoginActivity.this, getString(R.string.please_change_fields), Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Method used for loggin out from firebase and to clear local db
+     */
     private void logout() {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(getLocaleTopic()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            /**
+             * Callback triggered when user has been deleted from the topic, for firebase notification, with success
+             *
+             * @param aVoid
+             */
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
+                Log.i("FIREBASE_NOTIFICATIONS", "User has been removed with success from '" + getLocaleTopic() + "' topic");
             }
         });
         mAuth.signOut();
@@ -342,14 +458,22 @@ public class LoginActivity extends AppCompatActivity {
         db.cleanLogout();
     }
 
+    /**
+     * Method use to change activity and go to the main one
+     */
     private void goToMainActivity() {
-        Log.d("", "signInWithEmail:success");
+        Log.i("GO_MAIN_ACTIVITY", "Go to main activity");
         ((EditText) findViewById(R.id.et_email)).setText("");
         ((EditText) findViewById(R.id.et_password)).setText("");
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(myIntent);
     }
 
+    /**
+     * Method use to get name of topic where register the user for firebase notification
+     *
+     * @return the name of firebase's topic to subscribe user. It depends on the device language to get the notification in the right language
+     */
     private String getLocaleTopic() {
         return "all-" + Locale.getDefault().getLanguage();
     }
