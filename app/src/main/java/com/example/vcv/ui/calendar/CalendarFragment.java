@@ -43,6 +43,7 @@ public class CalendarFragment extends Fragment {
     TextView job;
     private Date today = new Date();
     public CalendarOrder currentOrder = null;
+    public Boolean useRemoteDate = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         CalendarViewModel.context = this.getContext();
@@ -63,7 +64,7 @@ public class CalendarFragment extends Fragment {
         String monthCapitalize = month.substring(0, 1).toUpperCase() + month.substring(1);
         textView.setText(monthCapitalize);
         setData(null);
-        setSaveAndChangeStatus(false, false);
+        setSaveAndChangeStatus(false, true);
 
         calendarViewModel.downloadDataFromFirebase();
 
@@ -170,7 +171,7 @@ public class CalendarFragment extends Fragment {
 
     private void getInfoCurrentDay(Date dateClicked) {
         confirm.setEnabled(true);
-        Boolean useRemoteDate = true;
+        useRemoteDate = true;
 
         for (CalendarOrder order :
                 calendarOrders) {
@@ -215,6 +216,7 @@ public class CalendarFragment extends Fragment {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date date = dateFormat.parse(order.dateCalendarOrder);
                     Event ev = new Event(R.color.colorWhite, date.getTime());
+                    compactCalendar.removeEvent(ev);
                     compactCalendar.addEvent(ev);
                 } catch (ParseException e) {
                     e.printStackTrace();

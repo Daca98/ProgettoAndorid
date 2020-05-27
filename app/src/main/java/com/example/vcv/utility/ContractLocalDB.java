@@ -39,6 +39,8 @@ public class ContractLocalDB extends SQLiteOpenHelper {
     public static final String COLUMN_NAME_ORDER_CONFIRMED = "Confirmed";
     public static final String COLUMN_NAME_ORDER_EQUIPMENT = "Equipment";
     public static final String COLUMN_NAME_ORDER_NOTE = "Note";
+    public static final String COLUMN_NAME_ORDER_REAL_HOUR_FROM = "RealHourFrom";
+    public static final String COLUMN_NAME_ORDER_REAL_HOUR_TO = "RealHourTo";
 
     private static final String SQL_CREATE_ORDER =
             "CREATE TABLE " + ContractLocalDB.TABLE_NAME_ORDER + " (" +
@@ -49,7 +51,9 @@ public class ContractLocalDB extends SQLiteOpenHelper {
                     ContractLocalDB.COLUMN_NAME_ORDER_JOB + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_CONFIRMED + " TEXT," +
                     ContractLocalDB.COLUMN_NAME_ORDER_EQUIPMENT + " TEXT," +
-                    ContractLocalDB.COLUMN_NAME_ORDER_NOTE + " TEXT)";
+                    ContractLocalDB.COLUMN_NAME_ORDER_NOTE + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_FROM + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_TO + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES_ORDER =
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_ORDER;

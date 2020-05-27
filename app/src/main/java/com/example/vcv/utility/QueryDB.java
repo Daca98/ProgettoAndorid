@@ -103,6 +103,8 @@ public class QueryDB {
         values.put(ContractLocalDB.COLUMN_NAME_ORDER_CONFIRMED, calendarOrder.confirmed);
         values.put(ContractLocalDB.COLUMN_NAME_ORDER_EQUIPMENT, calendarOrder.equipment);
         values.put(ContractLocalDB.COLUMN_NAME_ORDER_NOTE, calendarOrder.note);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_FROM, calendarOrder.realHourFrom);
+        values.put(ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_TO, calendarOrder.realHourTo);
 
         // Insert the new row, returning the primary key value of the new row
         newRowCount = db.insert(ContractLocalDB.TABLE_NAME_ORDER, null, values);
@@ -123,7 +125,7 @@ public class QueryDB {
         if (cursor.moveToFirst()) {
             do {
                 try {
-                    calendarOrder = new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7));
+                    calendarOrder = new CalendarOrder(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), !Boolean.getBoolean(cursor.getString(5)), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

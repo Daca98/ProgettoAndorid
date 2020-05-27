@@ -12,14 +12,18 @@ public class CalendarOrder {
     public Boolean confirmed;
     public String equipment;
     public String note;
+    public String realHourFrom;
+    public String realHourTo;
 
     public CalendarOrder() {
     }
 
-    public CalendarOrder(String dateCalendarOrder, String hourFrom, String hourTo, String dftHourToWork, String job, Boolean confirmed, String equipment, String note) throws Exception {
+    public CalendarOrder(String dateCalendarOrder, String hourFrom, String hourTo, String dftHourToWork, String job, Boolean confirmed, String equipment, String note, String realHourFrom, String realHourTo) throws Exception {
         String localStartAt = CalendarOrder.checkHourFormat(hourFrom);
         String localEndAt = CalendarOrder.checkHourFormat(hourTo);
         String localTotalHours = CalendarOrder.checkHourFormat(dftHourToWork);
+        String localRealStartAt = CalendarOrder.checkHourFormat(realHourFrom);
+        String localRealEndAt = CalendarOrder.checkHourFormat(realHourTo);
 
         if (!localStartAt.equals("") && !localEndAt.equals("") && !localTotalHours.equals("")) {
             this.dateCalendarOrder = dateCalendarOrder;
@@ -30,6 +34,8 @@ public class CalendarOrder {
             this.confirmed = confirmed;
             this.equipment = equipment;
             this.note = note;
+            this.realHourFrom = localRealStartAt;
+            this.realHourTo = localRealEndAt;
         } else {
             throw new Exception("Date format invalid");
         }
@@ -74,6 +80,8 @@ public class CalendarOrder {
                 !this.job.equals(newCalendarOrder.job) ||
                 !this.confirmed == newCalendarOrder.confirmed ||
                 !this.equipment.equals(newCalendarOrder.equipment) ||
-                !this.note.equals(newCalendarOrder.note);
+                !this.note.equals(newCalendarOrder.note) ||
+                !this.realHourFrom.equals(newCalendarOrder.realHourFrom) ||
+                !this.realHourTo.equals(newCalendarOrder.realHourTo);
     }
 }

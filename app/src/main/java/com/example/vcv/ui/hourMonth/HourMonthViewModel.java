@@ -47,7 +47,7 @@ public class HourMonthViewModel extends ViewModel {
                             if (calStart.getTime().compareTo(date) < 0 && date.compareTo(calEnd.getTime()) < 0) {
                                 CalendarOrder order = snap.getValue(CalendarOrder.class);
                                 totHoursShouldWork[0] += getSeconds(order.defaultHourToWork);
-                                totHoursWorked[0] += (getSeconds(order.hourTo) - getSeconds(order.hourFrom));
+                                totHoursWorked[0] += (getSeconds(order.realHourTo) - getSeconds(order.realHourFrom));
                                 totDays[0]++;
                             }
                         }

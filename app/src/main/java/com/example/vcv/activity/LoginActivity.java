@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.vcv.R;
 import com.example.vcv.ui.login.LoginFragment;
 import com.example.vcv.ui.signin.SigninFragment;
+import com.example.vcv.utility.CalendarOrder;
 import com.example.vcv.utility.QueryDB;
 import com.example.vcv.utility.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -352,4 +353,5 @@ public class LoginActivity extends AppCompatActivity {
     private String getLocaleTopic() {
         return "all-" + Locale.getDefault().getLanguage();
     }
+
 }

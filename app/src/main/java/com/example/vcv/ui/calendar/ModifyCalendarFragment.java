@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 public class ModifyCalendarFragment extends Fragment {
     private CalendarViewModel calendarViewModel;
     private CalendarOrder currentOrder;
+    private Boolean useRemoteDate;
     private CalendarFragment calendarFragment;
     private TextView hourStart, hourEnd, job;
     private EditText etJob, etStartHour, etEndHour, etTotalHour, etEquipment, etNote, twExtraHour;
@@ -27,6 +28,7 @@ public class ModifyCalendarFragment extends Fragment {
     public ModifyCalendarFragment(CalendarFragment calendarFragment) {
         this.calendarFragment = calendarFragment;
         currentOrder = calendarFragment.currentOrder;
+        useRemoteDate = calendarFragment.useRemoteDate;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,20 +47,22 @@ public class ModifyCalendarFragment extends Fragment {
                 try {
                     CalendarOrder newOrder = new CalendarOrder(
                             currentOrder.dateCalendarOrder,
-                            etStartHour.getText().toString(),
-                            etEndHour.getText().toString(),
+                            hourStart.getText().toString(),
+                            hourEnd.getText().toString(),
                             etTotalHour.getText().toString(),
                             etJob.getText().toString(),
                             currentOrder.confirmed,
                             etEquipment.getText().toString(),
-                            etNote.getText().toString()
+                            etNote.getText().toString(),
+                            etStartHour.getText().toString(),
+                            etEndHour.getText().toString()
                     );
                     if (currentOrder.equals(newOrder)) {
                         calendarViewModel.saveChanges(newOrder);
-                        hourStart.setText(newOrder.hourFrom);
-                        hourEnd.setText(newOrder.hourTo);
+                        etStartHour.setText(newOrder.realHourFrom);
+                        etEndHour.setText(newOrder.realHourTo);
                         calendarFragment.checkOnLocalData(newOrder);
-                        twExtraHour.setText(getExtraordinaryHours(newOrder.hourFrom, newOrder.hourTo, newOrder.defaultHourToWork));
+                        twExtraHour.setText(getExtraordinaryHours(newOrder.realHourFrom, newOrder.realHourTo, newOrder.defaultHourToWork));
                         currentOrder = newOrder;
                         Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
                     } else {
@@ -97,13 +101,31 @@ public class ModifyCalendarFragment extends Fragment {
         job.setText(currentOrder.job);
 
         etJob.setText(currentOrder.job);
-        etStartHour.setText(currentOrder.hourFrom);
-        etEndHour.setText(currentOrder.hourTo);
         etTotalHour.setText(currentOrder.defaultHourToWork);
-        etEquipment.setText(currentOrder.equipment);
-        etNote.setText(currentOrder.note);
+        if(!currentOrder.realHourFrom.equals("00:00")){
+            etStartHour.setText(currentOrder.realHourFrom);
+        }
+        if(!currentOrder.realHourTo.equals("00:00")) {
+            etEndHour.setText(currentOrder.realHourTo);
+        }
+        if(!currentOrder.equipment.equals("")) {
+            etEquipment.setText(currentOrder.equipment);
+        }
+        if(!currentOrder.note.equals("")) {
+            etNote.setText(currentOrder.note);
+        }
+        if(!currentOrder.realHourTo.equals("00:00") && !currentOrder.realHourFrom.equals("00:00")){
+            twExtraHour.setText(getExtraordinaryHours(currentOrder.realHourFrom, currentOrder.realHourTo, currentOrder.defaultHourToWork));
+        }
 
-        twExtraHour.setText(getExtraordinaryHours(currentOrder.hourFrom, currentOrder.hourTo, currentOrder.defaultHourToWork));
+        if(!useRemoteDate){
+            modify.setEnabled(true);
+            modify.setBackgroundResource(R.drawable.button_confirm);
+        }
+        else{
+            modify.setEnabled(false);
+            modify.setBackgroundResource(R.drawable.button_disabled);
+        }
     }
 
     public String getExtraordinaryHours(String startHour, String endHour, String dftHour) {

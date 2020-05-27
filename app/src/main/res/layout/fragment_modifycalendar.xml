@@ -140,7 +140,17 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/job"
                             android:drawableStart="@drawable/work"
-                            android:drawableLeft="@drawable/work" />
+                            android:drawableLeft="@drawable/work"
+                            android:focusable="false"/>
+                        <EditText
+                            style="@style/EditTextStyle"
+                            android:id="@+id/et_totalHour"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/totalHour"
+                            android:drawableStart="@drawable/time"
+                            android:drawableLeft="@drawable/time"
+                            android:focusable="false"/>
                     </LinearLayout>
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -173,14 +183,6 @@
                         android:orientation="vertical"
                         android:paddingLeft="25dp"
                         android:paddingRight="25dp">
-                        <EditText
-                            style="@style/EditTextStyle"
-                            android:id="@+id/et_totalHour"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/totalHour"
-                            android:drawableStart="@drawable/time"
-                            android:drawableLeft="@drawable/time" />
                         <EditText
                             style="@style/EditTextStyle"
                             android:id="@+id/et_equipment"
