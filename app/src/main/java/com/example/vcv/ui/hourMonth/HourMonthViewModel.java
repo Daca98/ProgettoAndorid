@@ -87,26 +87,37 @@ public class HourMonthViewModel extends ViewModel {
                     }
                 });
             } else {
-                FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(keyRecap).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot != null) {
-                            RecapHours recap = dataSnapshot.getValue(RecapHours.class);
+                if (db == null) {
+                    db = new QueryDB(context);
+                }
 
-                            if (recap != null) {
-                                hourMonthFragment.writeHoursInGraphics(recap.totHoursShouldWork, recap.totHoursWorked, recap.totExtra, Integer.parseInt(recap.toCalculation.split("-")[2]));
+                RecapHours recap = db.readRecap(keyRecap);
+
+                if (recap != null) {
+                    hourMonthFragment.writeHoursInGraphics(recap.totHoursShouldWork, recap.totHoursWorked, recap.totExtra, Integer.parseInt(recap.toCalculation.split("-")[2]));
+                } else {
+                    FirebaseDatabase.getInstance().getReference().child("recaps").child(user.badgeNumber).child(keyRecap).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot != null) {
+                                RecapHours recap = dataSnapshot.getValue(RecapHours.class);
+
+                                if (recap != null) {
+                                    hourMonthFragment.writeHoursInGraphics(recap.totHoursShouldWork, recap.totHoursWorked, recap.totExtra, Integer.parseInt(recap.toCalculation.split("-")[2]));
+                                    db.insertRecap(recap);
+                                } else {
+                                    hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
+                                }
                             } else {
                                 hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
                             }
-                        } else {
-                            hourMonthFragment.writeHoursInGraphics("00:00", "00:00", "00:00", 0);
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }
             }
         }
     }

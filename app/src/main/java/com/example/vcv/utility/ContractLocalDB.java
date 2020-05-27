@@ -58,6 +58,27 @@ public class ContractLocalDB extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES_ORDER =
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_ORDER;
 
+
+    // Table recap
+    public static final String TABLE_NAME_RECAP = "RecapHours";
+    public static final String COLUMN_NAME_RECAP_ID = "ID";
+    public static final String COLUMN_NAME_RECAP_TO_CALCULATION = "ToCalculation";
+    public static final String COLUMN_NAME_RECAP_TOT_HOURS_SHOULD_WORK = "TotHoursShouldWork";
+    public static final String COLUMN_NAME_RECAP_TOT_HOURS_WORKED = "TotHoursWorked";
+    public static final String COLUMN_NAME_RECAP_TOT_EXTRA = "TotExtra";
+
+    private static final String SQL_CREATE_RECAP =
+            "CREATE TABLE " + ContractLocalDB.TABLE_NAME_RECAP + " (" +
+                    ContractLocalDB.COLUMN_NAME_RECAP_ID + " TEXT PRIMARY KEY," +
+                    ContractLocalDB.COLUMN_NAME_RECAP_TO_CALCULATION + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_RECAP_TOT_HOURS_SHOULD_WORK + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_RECAP_TOT_HOURS_WORKED + " TEXT," +
+                    ContractLocalDB.COLUMN_NAME_RECAP_TOT_EXTRA + " TEXT )";
+
+    private static final String SQL_DELETE_ENTRIES_RECAP =
+            "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_RECAP;
+
+
     public ContractLocalDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -66,6 +87,7 @@ public class ContractLocalDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USER);
         db.execSQL(SQL_CREATE_ORDER);
+        db.execSQL(SQL_CREATE_RECAP);
     }
 
     @Override
@@ -74,6 +96,7 @@ public class ContractLocalDB extends SQLiteOpenHelper {
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES_USER);
         db.execSQL(SQL_DELETE_ENTRIES_ORDER);
+        db.execSQL(SQL_DELETE_ENTRIES_RECAP);
         onCreate(db);
     }
 }

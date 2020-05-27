@@ -5,10 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class QueryDB {
@@ -136,4 +133,49 @@ public class QueryDB {
         return calendarOrder;
     }
 
+    // Query for recap
+    public RecapHours readRecap(String id) {
+        RecapHours recap = null;
+
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + ContractLocalDB.TABLE_NAME_RECAP + " WHERE " + ContractLocalDB.COLUMN_NAME_RECAP_ID + " = '" + id + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                // get the data into array, or class variable
+                recap = new RecapHours(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return recap;
+    }
+
+    public long insertRecap(RecapHours recapHours) {
+        String[] ids = recapHours.toCalculation.split("-");
+        long newRowId = -1;
+
+        if (readRecap(ids[0] + "-" + ids[1]) == null) {
+            // Gets the data repository in write mode
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            // Create a new map of values, where column names are the keys
+            ContentValues values = new ContentValues();
+            values.put(ContractLocalDB.COLUMN_NAME_RECAP_ID, ids[0] + "-" + ids[1]);
+            values.put(ContractLocalDB.COLUMN_NAME_RECAP_TO_CALCULATION, recapHours.toCalculation);
+            values.put(ContractLocalDB.COLUMN_NAME_RECAP_TOT_HOURS_SHOULD_WORK, recapHours.totHoursShouldWork);
+            values.put(ContractLocalDB.COLUMN_NAME_RECAP_TOT_HOURS_WORKED, recapHours.totHoursWorked);
+            values.put(ContractLocalDB.COLUMN_NAME_RECAP_TOT_EXTRA, recapHours.totExtra);
+
+            // Insert the new row, returning the primary key value of the new row
+            newRowId = db.insert(ContractLocalDB.TABLE_NAME_RECAP, null, values);
+        } else {
+            newRowId = 0;
+        }
+
+        return newRowId;
+    }
 }
