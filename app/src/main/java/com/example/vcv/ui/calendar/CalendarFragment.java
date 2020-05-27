@@ -1,7 +1,5 @@
 package com.example.vcv.ui.calendar;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -41,7 +38,6 @@ public class CalendarFragment extends Fragment {
     TextView hourStart;
     TextView hourEnd;
     TextView job;
-    private Date today = new Date();
     public CalendarOrder currentOrder = null;
     public Boolean useRemoteDate = false;
 

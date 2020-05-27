@@ -108,8 +108,6 @@ public class CalendarViewModel extends ViewModel {
                             order.dateCalendarOrder = sdf.format(date);
 
                             db.insertSingleCalendarOrderData(order);
-
-                            calendarFragment.setData(order);
                         }
                         calendarFragment.setData(order);
                     }

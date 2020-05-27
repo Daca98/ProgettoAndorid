@@ -26,6 +26,9 @@ public class MyProfileViewModel extends ViewModel {
     public LiveData<User> getUser() {
         return mUser;
     }
+    public void setUser(User user) {
+        mUser.postValue(user);
+    }
 
     private User getUserFromLocalDB() {
         db = new QueryDB(context);

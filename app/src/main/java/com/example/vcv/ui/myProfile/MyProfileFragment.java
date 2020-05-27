@@ -204,8 +204,10 @@ public class MyProfileFragment extends Fragment {
         String surname = ((EditText) getActivity().findViewById(R.id.et_surname_user_data)).getText() + "";
         String telephone = ((EditText) getActivity().findViewById(R.id.et_telephone_user_data)).getText() + "";
 
-        if ((!name.equals("") && !name.equals(user.name)) || (!surname.equals("") && !surname.equals(user.surname)) || (!telephone.equals("") && !telephone.equals(user.telephone))) {
-            myProfileViewModel.writeNewDataInDB(new User(name, surname, telephone, user.badgeNumber, user.email));
+        if ((!name.equals(user.name) || !surname.equals(user.surname) || !telephone.equals(user.telephone)) && !name.equals("") && !surname.equals("") && !telephone.equals("")) {
+            User newUser = new User(name, surname, telephone, user.badgeNumber, user.email);
+            myProfileViewModel.writeNewDataInDB(newUser);
+            myProfileViewModel.setUser(newUser);
             Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), getString(R.string.change_field), Toast.LENGTH_SHORT).show();
