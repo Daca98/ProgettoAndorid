@@ -29,8 +29,10 @@ public class HourMonthFragment extends Fragment {
     private HourMonthViewModel hourMonthViewModel;
     public TextView hoursShouldWork, hoursWorked, hoursExtra, attention;
     Spinner monthChoices, yearsChoices;
-    final int[] monthSelected = new int[]{-1};
-    final int[] yearSelected = new int[]{-1};
+    int monthSelected = -1;
+    int yearSelected = -1;
+    boolean firstLoadMonth = true;
+    boolean firstLoadYear = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HourMonthViewModel.context = this.getContext();
@@ -42,7 +44,7 @@ public class HourMonthFragment extends Fragment {
         initGraphics(root);
 
         Date date = new Date();
-        hourMonthViewModel.getMonthHoursRecap(Integer.parseInt(new SimpleDateFormat("MM").format(date)), Integer.parseInt(new SimpleDateFormat("yyyy").format(date)));
+        hourMonthViewModel.getMonthHoursRecap(new SimpleDateFormat("yyyy").format(date) + "-" + new SimpleDateFormat("MM").format(date));
 
         return root;
     }
@@ -60,18 +62,19 @@ public class HourMonthFragment extends Fragment {
         monthChoices = root.findViewById(R.id.choose_month);
         monthChoices.setAdapter(adapterMonths);
         monthChoices.setSelection(currentMonthSpinner);
-        monthSelected[0] = currentMonthSpinner;
+        monthSelected = currentMonthSpinner;
         monthChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
-                    if (monthSelected[0] > -1 && yearSelected[0] > -1) {
+                    if (!firstLoadMonth) {
                         Date date = new SimpleDateFormat("MMMM", Locale.getDefault()).parse(adapterView.getItemAtPosition(i).toString());
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(date);
-                        monthSelected[0] = cal.get(Calendar.MONTH);
-                        hourMonthViewModel.getMonthHoursRecap(monthSelected[0], yearSelected[0]);
+                        monthSelected = cal.get(Calendar.MONTH);
+                        hourMonthViewModel.getMonthHoursRecap(yearSelected + "-" + String.format("%02d", (monthSelected + 1)));
                     }
+                    firstLoadMonth = false;
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -91,16 +94,18 @@ public class HourMonthFragment extends Fragment {
 
         yearsChoices = root.findViewById(R.id.choose_year);
         yearsChoices.setAdapter(adapterYears);
-        int currentYearSpinner = adapterYears.getPosition(new SimpleDateFormat("yyyy").format(today));
+        String currentYear = new SimpleDateFormat("yyyy").format(today);
+        int currentYearSpinner = adapterYears.getPosition(currentYear);
         yearsChoices.setSelection(currentYearSpinner);
-        yearSelected[0] = currentYearSpinner;
+        yearSelected = Integer.parseInt(currentYear);
         yearsChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (monthSelected[0] > -1 && yearSelected[0] > -1) {
-                    yearSelected[0] = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
-                    hourMonthViewModel.getMonthHoursRecap(monthSelected[0], yearSelected[0]);
+                if (!firstLoadYear) {
+                    yearSelected = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
+                    hourMonthViewModel.getMonthHoursRecap(yearSelected + "-" + String.format("%02d", (monthSelected + 1)));
                 }
+                firstLoadYear = false;
             }
 
             @Override
@@ -118,11 +123,11 @@ public class HourMonthFragment extends Fragment {
     }
 
     private String getFirstDayOfMonth() {
-        return "01/" + String.format("%02d", (monthSelected[0] + 1)) + "/" + String.format("%02d", yearSelected[0]);
+        return "01/" + String.format("%02d", (monthSelected + 1)) + "/" + String.format("%02d", yearSelected);
     }
 
     private String getFinalDayRecap(int daysCalculatedOn) {
         int day = daysCalculatedOn > 0 ? daysCalculatedOn : 1;
-        return day + "/" + String.format("%02d", (monthSelected[0] + 1)) + "/" + String.format("%02d", yearSelected[0]);
+        return day + "/" + String.format("%02d", (monthSelected + 1)) + "/" + String.format("%02d", yearSelected);
     }
 }
