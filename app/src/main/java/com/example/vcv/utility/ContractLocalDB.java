@@ -3,7 +3,12 @@ package com.example.vcv.utility;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class ContractLocalDB extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
@@ -29,7 +34,6 @@ public class ContractLocalDB extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_USER;
 
     // Table order
-    //public static final String COLUMN_NAME_ORDER_ID = "ID";
     public static final String TABLE_NAME_ORDER = "CalendarOrder";
     public static final String COLUMN_NAME_ORDER_DATE = "DateCalendarOrder";
     public static final String COLUMN_NAME_ORDER_HOUR_FROM = "HourFrom";
@@ -78,22 +82,37 @@ public class ContractLocalDB extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES_RECAP =
             "DROP TABLE IF EXISTS " + ContractLocalDB.TABLE_NAME_RECAP;
 
-
+    /**
+     * Constructor
+     *
+     * @param context
+     */
     public ContractLocalDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Method used to create DB tables
+     *
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USER);
         db.execSQL(SQL_CREATE_ORDER);
         db.execSQL(SQL_CREATE_RECAP);
+        Log.i("SQL_LITE_DB", "Created tables with success");
     }
 
+    /**
+     * Method used to upgrade the DB version
+     *
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES_USER);
         db.execSQL(SQL_DELETE_ENTRIES_ORDER);
         db.execSQL(SQL_DELETE_ENTRIES_RECAP);

@@ -1,6 +1,7 @@
 package com.example.vcv.ui.path;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class PathFragment extends Fragment{
 
     private PathViewModel pathViewModel;
@@ -36,6 +41,14 @@ public class PathFragment extends Fragment{
     View root;
     Bundle savedInstanceState;
 
+    /**
+     * Method used to create the fragment
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View to inflate in the graphics
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         pathViewModel =
@@ -52,6 +65,11 @@ public class PathFragment extends Fragment{
         return root;
     }
 
+    /**
+     * Method used to set the array list of personal map, in the spinner
+     *
+     * @param downloadedMaps
+     */
     public void setMenu(ArrayList<PersonalMap> downloadedMaps){
         maps = downloadedMaps;
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(
@@ -75,14 +93,28 @@ public class PathFragment extends Fragment{
         }
 
         mapView.getMapAsync(new OnMapReadyCallback() {
+            /**
+             * Method to handle the loading of the map
+             *
+             * @param mMap
+             */
             @Override
             public void onMapReady(GoogleMap mMap) {
                 map = mMap;
                 paths.setSelection(0);
+                Log.i("MAP", "Map loaded successfully");
             }
         });
 
         paths.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Method wo handle the selection of an item, in the spinner
+             *
+             * @param parentView
+             * @param selectedItemView
+             * @param position
+             * @param id
+             */
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 map.clear();
@@ -107,9 +139,13 @@ public class PathFragment extends Fragment{
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
 
+            /**
+             * Method to handle when nothing is selected
+             *
+             * @param adapterView
+             */
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }

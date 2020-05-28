@@ -4,18 +4,35 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class QueryDB {
     private ContractLocalDB dbHelper;
 
+    /**
+     * Constructor
+     *
+     * @param ctx
+     */
     public QueryDB(Context ctx) {
         dbHelper = new ContractLocalDB(ctx);
     }
 
     // Query for user
+
+    /**
+     * Method used to insert User data in local DB
+     *
+     * @param user
+     * @return long that represent the number of the row in table user
+     */
     public long insertUserData(User user) {
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -28,11 +45,17 @@ public class QueryDB {
         values.put(ContractLocalDB.COLUMN_NAME_USER_BADGE_NUMBER, user.badgeNumber);
         values.put(ContractLocalDB.COLUMN_NAME_USER_TELEPHONE, user.telephone);
 
-        // Insert the new row, returning the primary key value of the new row
+        // Insert the new row, returning the number of the row
         long newRowId = db.insert(ContractLocalDB.TABLE_NAME_USER, null, values);
+        Log.i("SQL_LITE_DATABASE", "Insert user successfully");
         return newRowId;
     }
 
+    /**
+     * Method to read User logged data
+     *
+     * @return User logged
+     */
     public User readUser() {
         User user = null;
 
@@ -53,6 +76,12 @@ public class QueryDB {
         return user;
     }
 
+    /**
+     * Method used to update User logged data
+     *
+     * @param user
+     * @return int that represent row updated
+     */
     public int updateUser(User user) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -62,28 +91,46 @@ public class QueryDB {
         values.put(ContractLocalDB.COLUMN_NAME_USER_TELEPHONE, user.telephone);
 
         int rowUpdated = db.update(ContractLocalDB.TABLE_NAME_USER, values, ContractLocalDB.COLUMN_NAME_USER_BADGE_NUMBER + " = ?", new String[]{user.badgeNumber});
-
+        Log.i("SQL_LITE_DATABASE", "Updated user successfully");
         return rowUpdated;
     }
 
+    /**
+     * Method used to clean tables when user logout
+     */
     public void cleanLogout() {
         cleanUser();
         cleanOrders();
     }
 
+    /**
+     * Method to clean user table
+     */
     private void cleanUser() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         db.execSQL("DELETE FROM " + ContractLocalDB.TABLE_NAME_USER);
+        Log.i("SQL_LITE_DATABASE", "Deleted table user successfully");
     }
 
     // Query for calendar order
+
+    /**
+     * Method to clean calendarOrder table
+     */
     private void cleanOrders() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         db.execSQL("DELETE FROM " + ContractLocalDB.TABLE_NAME_ORDER);
+        Log.i("SQL_LITE_DATABASE", "Deleted table order successfully");
     }
 
+    /**
+     * Method used to insert single calendarOrder in local DB
+     *
+     * @param calendarOrder
+     * @return long that represent the number of the row in table calendarOrder
+     */
     public long insertSingleCalendarOrderData(CalendarOrder calendarOrder) {
         long newRowCount = 0;
 
@@ -103,12 +150,18 @@ public class QueryDB {
         values.put(ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_FROM, calendarOrder.realHourFrom);
         values.put(ContractLocalDB.COLUMN_NAME_ORDER_REAL_HOUR_TO, calendarOrder.realHourTo);
 
-        // Insert the new row, returning the primary key value of the new row
+        // Insert the new row, returning the number of the row
         newRowCount = db.insert(ContractLocalDB.TABLE_NAME_ORDER, null, values);
-
+        Log.i("SQL_LITE_DATABASE", "Insert calendarOrder successfully");
         return newRowCount;
     }
 
+    /**
+     * Method to retrieve CalendarOrder of a specific date
+     *
+     * @param date
+     * @return CalendarOrder object
+     */
     public CalendarOrder readCalendarOrderSingleDay(Date date) {
         CalendarOrder calendarOrder = null;
 
@@ -134,6 +187,13 @@ public class QueryDB {
     }
 
     // Query for recap
+
+    /**
+     * Method to retrieve RecapHour
+     *
+     * @param id
+     * @return RecapHour object
+     */
     public RecapHours readRecap(String id) {
         RecapHours recap = null;
 
@@ -154,6 +214,12 @@ public class QueryDB {
         return recap;
     }
 
+    /**
+     * Method used to insert recap hour in local DB
+     *
+     * @param recapHours
+     * @return long that represent the number of the row in table recap
+     */
     public long insertRecap(RecapHours recapHours) {
         String[] ids = recapHours.toCalculation.split("-");
         long newRowId = -1;
@@ -170,8 +236,9 @@ public class QueryDB {
             values.put(ContractLocalDB.COLUMN_NAME_RECAP_TOT_HOURS_WORKED, recapHours.totHoursWorked);
             values.put(ContractLocalDB.COLUMN_NAME_RECAP_TOT_EXTRA, recapHours.totExtra);
 
-            // Insert the new row, returning the primary key value of the new row
+            // Insert the new row, returning the number of the row
             newRowId = db.insert(ContractLocalDB.TABLE_NAME_RECAP, null, values);
+            Log.i("SQL_LITE_DATABASE", "Insert recap successfully");
         } else {
             newRowId = 0;
         }

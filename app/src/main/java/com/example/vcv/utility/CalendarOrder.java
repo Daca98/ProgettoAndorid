@@ -1,7 +1,9 @@
 package com.example.vcv.utility;
 
-import com.example.vcv.ui.calendar.CalendarViewModel;
-
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class CalendarOrder {
 
     public String dateCalendarOrder;
@@ -15,9 +17,27 @@ public class CalendarOrder {
     public String realHourFrom;
     public String realHourTo;
 
+    /**
+     * Empty constructor
+     */
     public CalendarOrder() {
     }
 
+    /**
+     * Constructor
+     *
+     * @param dateCalendarOrder
+     * @param hourFrom
+     * @param hourTo
+     * @param dftHourToWork
+     * @param job
+     * @param confirmed
+     * @param equipment
+     * @param note
+     * @param realHourFrom
+     * @param realHourTo
+     * @throws Exception
+     */
     public CalendarOrder(String dateCalendarOrder, String hourFrom, String hourTo, String dftHourToWork, String job, Boolean confirmed, String equipment, String note, String realHourFrom, String realHourTo) throws Exception {
         String localStartAt = CalendarOrder.checkHourFormat(hourFrom);
         String localEndAt = CalendarOrder.checkHourFormat(hourTo);
@@ -41,6 +61,12 @@ public class CalendarOrder {
         }
     }
 
+    /**
+     * Method used to check the hour format when create the object
+     *
+     * @param hour
+     * @return String correctly formatted
+     */
     private static String checkHourFormat(String hour) {
         String newHour = "";
 
@@ -69,6 +95,12 @@ public class CalendarOrder {
         return newHour;
     }
 
+    /**
+     * Method to compare the object
+     *
+     * @param calendarOrder
+     * @return boolean depends if equals or not
+     */
     @Override
     public boolean equals(Object calendarOrder) {
         CalendarOrder newCalendarOrder = (CalendarOrder) calendarOrder;

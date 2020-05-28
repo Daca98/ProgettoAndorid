@@ -12,29 +12,57 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * @author Mattia Da Campo e Andrea Dalle Fratte
+ * @version 1.0
+ */
 public class MyProfileViewModel extends ViewModel {
 
     private MutableLiveData<User> mUser;
     public static Context context;
     private static QueryDB db;
 
+    /**
+     * Constructor
+     */
     public MyProfileViewModel() {
         mUser = new MutableLiveData<>();
         mUser.setValue(getUserFromLocalDB());
     }
 
+    /**
+     * Method to get user data from fragment
+     *
+     * @return User
+     */
     public LiveData<User> getUser() {
         return mUser;
     }
+
+    /**
+     * Method to set user data in fragment
+     *
+     * @return User
+     */
     public void setUser(User user) {
         mUser.postValue(user);
     }
 
+    /**
+     * Method use to get logged user from local DB
+     *
+     * @return logged user
+     */
     private User getUserFromLocalDB() {
         db = new QueryDB(context);
         return db.readUser();
     }
 
+    /**
+     * Method to update the user data in local DB
+     *
+     * @param user
+     */
     public void writeNewDataInDB(User user) {
         String uid = FirebaseAuth.getInstance().getUid();
 

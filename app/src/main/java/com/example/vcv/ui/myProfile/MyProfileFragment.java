@@ -239,7 +239,8 @@ public class MyProfileFragment extends Fragment {
     }
 
     /**
-     * Method used
+     * Method used to take the result of users' permsission
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -258,6 +259,9 @@ public class MyProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to update data of the user
+     */
     private void saveChanges() {
         String name = ((EditText) getActivity().findViewById(R.id.et_name_user_data)).getText() + "";
         String surname = ((EditText) getActivity().findViewById(R.id.et_surname_user_data)).getText() + "";
@@ -267,25 +271,44 @@ public class MyProfileFragment extends Fragment {
             User newUser = new User(name, surname, telephone, user.badgeNumber, user.email);
             myProfileViewModel.writeNewDataInDB(newUser);
             myProfileViewModel.setUser(newUser);
+            Log.i("UPDATE_USER", "Updated user with success");
             Toast.makeText(getContext(), getString(R.string.save_data_success), Toast.LENGTH_SHORT).show();
         } else {
+            Log.e("UPDATE_USER", "Failed to update user");
             Toast.makeText(getContext(), getString(R.string.change_field), Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Class used to save image
+     */
     private class SaveImage extends AsyncTask<Void, Void, Void> {
         private Bitmap bitmapImage;
 
+        /**
+         * Constructor
+         *
+         * @param bitmapImage
+         */
         public SaveImage(Bitmap bitmapImage) {
             super();
             this.bitmapImage = bitmapImage;
         }
 
+        /**
+         *
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
+        /**
+         * Metohod to take the image and compress it
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Void doInBackground(Void... params) {
             FileOutputStream fos = null;
@@ -312,6 +335,11 @@ public class MyProfileFragment extends Fragment {
             return null;
         }
 
+        /**
+         * Method that handle the finish of the execution
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
@@ -321,13 +349,21 @@ public class MyProfileFragment extends Fragment {
 
     }
 
-    // Utility
+    /**
+     * Method to interact with user, to choose between 'take picture' or 'choose from gallery'
+     */
     private void chooseImage() {
         final CharSequence[] options = {getString(R.string.take_picture), getString(R.string.choose_from_gallery), getString(R.string.cancel)};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.choose_profile_pic_title));
 
         builder.setItems(options, new DialogInterface.OnClickListener() {
+            /**
+             * Method to handle choice of the user
+             *
+             * @param dialog
+             * @param item
+             */
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals(getString(R.string.take_picture))) {
@@ -350,6 +386,9 @@ public class MyProfileFragment extends Fragment {
         builder.show();
     }
 
+    /**
+     * Method to set default image
+     */
     private void setDefaultIcon() {
         try {
             ImageView profilePicture = getActivity().findViewById(R.id.profile_picture);
@@ -362,6 +401,9 @@ public class MyProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to load image from storage if available
+     */
     private void loadImageFromStorage() {
         boolean hasToSetDefaultImage = true;
 
@@ -390,6 +432,9 @@ public class MyProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to remove image from storage
+     */
     private void removeImageFromStorage() {
         try {
             ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
@@ -397,17 +442,22 @@ public class MyProfileFragment extends Fragment {
 
             File f = new File(directory, "profile.jpg");
             if (f.delete()) {
+                Log.i("IMAGE_REMOVED", "Image removed with success");
                 Toast.makeText(getContext(), getString(R.string.success_remove_image), Toast.LENGTH_SHORT).show();
 
                 setDefaultIcon();
             } else {
+                Log.e("IMAGE_REMOVED", "Some problems occurs while removing profile image");
                 Toast.makeText(getContext(), getString(R.string.error_remove_image), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("IMAGE_REMOVED", "Some problems occurs while removing profile image" + e.getMessage());
         }
     }
 
+    /**
+     * Method to stop the progressBar
+     */
     private void stopProgressBar() {
         try {
             ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar_image);
@@ -417,6 +467,9 @@ public class MyProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to start the progressBar
+     */
     private void startProgressBar() {
         try {
             ProgressBar progressBar = getActivity().findViewById(R.id.progress_bar_image);
